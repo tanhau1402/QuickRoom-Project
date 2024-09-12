@@ -55,4 +55,7 @@ export const  menu = [
             }
         ]
     }
-]
+];
+
+export const listTypeRoom = ["Standard","Single bed room","Twin bed room"];
+export const listAvailable = ["Available","Not Available","Repairing"];

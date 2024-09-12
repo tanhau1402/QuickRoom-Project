@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
+import { listTypeRoom, listAvailable } from "../../../utils/Constants";
 import {
   Modal,
   Box,
@@ -23,33 +24,42 @@ import {
   deleteDocument,
   updateDocument,
 } from "../../../services/FirebaseService";
-
-import Amenities from "./Amenities";
 import ModalDelete from "./ModalDelete";
-
+import { ContextAmenities } from "../../../context/AmenitiesContext";
 function Rooms(props) {
   const [listRooms, setListRooms] = useState([]);
-  const [listTypeRoom, setListTypeRoom] = useState(["1", "2", "3"]);
   const [selectedRoomType, setSelectedRoomType] = useState("");
   const [room, setRoom] = useState([]);
+  const [listAmenities, setListAmenities] = useState([]);
   const [open, setOpen] = useState(false);
   const [update, setUpdate] = useState(false);
   const [deleteId, setDeleteId] = useState(null);
-  const [amenities, setAmenities] = useState([]);
   const [deleteModal, setDeleteModal] = useState(false);
+  const amenities = useContext(ContextAmenities);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
-  const handleChange = (event) => {
-    setSelectedRoomType(event.target.value);
+  const handleAmenities = (id) => {
+    setListAmenities((prev) => {
+      let updatedAmenities;
+      const idAmenity = prev.find((a) => a === id);
+  
+      if (idAmenity) {
+        // Remove the amenity if it's already in the list
+        updatedAmenities = prev.filter((a) => a !== id);
+      } else {
+        // Add the amenity if it's not in the list
+        updatedAmenities = [...prev, id];
+      }
+  
+      // Update the room with the new list of amenities
+      setRoom({ ...room, listAmenities: updatedAmenities });
+  
+      return updatedAmenities; // Update listAmenities state
+    });
   };
-  useEffect(() => {
-    const fetchData = async () => {
-      const amenitiesData = await fetchDocuments("amenities");
-      setAmenities(amenitiesData);
-    };
-    fetchData();
-  }, [update]);
+  
+  console.log(room);
   useEffect(() => {
     const fetchData = async () => {
       const roomsData = await fetchDocuments("listRooms");
@@ -78,7 +88,13 @@ function Rooms(props) {
   const clearRoom = () => {
     handleOpen();
     setRoom({});
- }
+  }
+
+  function amenityopen(id) {
+       const open = listAmenities.find(a => a == id);
+    
+       return open ? open : "";
+  }
   return (
     <div>
       <header className="grid grid-cols-12 gap-4 p-4">
@@ -121,7 +137,8 @@ function Rooms(props) {
                 <TableCell align="center">
                   <Button
                     onClick={() => {
-                      setOpen(true); setRoom(room)
+                      setOpen(true);
+                      setRoom(room);
                     }}
                     sx={{ padding: "10px", mr: 1 }}
                     variant="contained"
@@ -133,7 +150,10 @@ function Rooms(props) {
                     variant="contained"
                     color="error"
                     sx={{ padding: "10px", mr: 1 }}
-                    onClick={() => {setDeleteModal(true) ; setDeleteId(room.id)} }
+                    onClick={() => {
+                      setDeleteModal(true);
+                      setDeleteId(room.id);
+                    }}
                   >
                     <i class="fa-solid fa-trash"></i>
                   </Button>
@@ -151,7 +171,7 @@ function Rooms(props) {
             <Select
               labelId="room-type-label"
               id="room-type-select"
-              value={selectedRoomType}
+              value={room.type}
               label="Room Type"
               onChange={(e) => setRoom({ ...room, type: e.target.value })}
             >
@@ -173,36 +193,62 @@ function Rooms(props) {
             style={{ marginBottom: "10px", marginTop: "10px" }}
           />
           <FormControl fullWidth>
-            <InputLabel id="room-availability-label">
-              Room Availability
-            </InputLabel>
+            <InputLabel id="room-available-label">Room Available</InputLabel>
             <Select
-              labelId="room-availability-label"
-              id="room-availability-select"
-              value={room.available}
-              label="Room Availability"
-              onChange={(e) => setRoom({ ...room, available: e.target.value })}
+              labelId="room-available-label"
+              id="room-available-select"
               style={{ marginBottom: "10px" }}
+              label="Room Available"
+              onChange={(e) => setRoom({ ...room, available: e.target.value })}
             >
-              <MenuItem value="available">Available</MenuItem>
-              <MenuItem value="not_available">Not Available</MenuItem>
-            </Select>
-          </FormControl>
-          <FormControl fullWidth>
-            <InputLabel id="room-type-amenity">Room Amenity</InputLabel>
-            <Select
-              labelId="room-type-amenity"
-              id="room-amenity-select"
-              value={room.amenity}
-              label="Room Amenity"
-              onChange={(e) => setRoom({ ...room, amenity: e.target.value })}
-            >
-              {amenities.map((amenity) => (
-                <MenuItem key={amenity.id} value={amenity.name}>
-                  {amenity.name}
+              {listAvailable.map((type, index) => (
+                <MenuItem key={index} value={type}>
+                  {type}
                 </MenuItem>
               ))}
             </Select>
+          </FormControl>
+          <FormControl
+            fullWidth
+            style={{ textAlign: "center", marginBottom: "10px" }}
+          >
+            <InputLabel
+              id="room-type-amenity"
+              style={{
+                position: "relative",
+                top: "-20px",
+               
+                color: "#333",
+              }}
+            >
+              Room Amenity
+            </InputLabel>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                gap: "10px",
+                flexWrap: "wrap",
+              }}
+            >
+              {amenities.map((amenity) => (
+                <Button
+                  key={amenity.id}
+                  onClick={() => handleAmenities(amenity.id)}
+                  variant={
+                    amenityopen(amenity.id) ? "contained" : "outlined"
+                  }
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    padding: "10px",
+                  }}
+                >
+                  <i className={amenity.icon}></i>
+                </Button>
+              ))}
+            </div>
           </FormControl>
 
           <Box className="flex justify-end mt-4">
@@ -220,8 +266,11 @@ function Rooms(props) {
           </Box>
         </Box>
       </Modal>
-      <ModalDelete setDeleteModal={setDeleteModal} deleteModal={deleteModal} handleDelete={handleDelete} />
-
+      <ModalDelete
+        setDeleteModal={setDeleteModal}
+        deleteModal={deleteModal}
+        handleDelete={handleDelete}
+      />
     </div>
   );
 }

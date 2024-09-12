@@ -105,7 +105,7 @@ const clearAmenity = () => {
             {amenities.map((amenity, index) => (
               <TableRow key={index}>
                 <TableCell align = "center">{amenity.name}</TableCell>
-                <TableCell align = "center">{amenity.icon}</TableCell>
+                <TableCell align = "center"> <i className={amenity.icon}></i></TableCell>
                 <TableCell align = "center">
                   <Button onClick={() => {setOpen(true) ; setAmenity(amenity); setEditId(amenity.deleteId)} }   sx={{ padding: '10px',mr:1 }} variant="contained" color="primary">
                   <i class="fa-regular fa-pen-to-square"></i>
