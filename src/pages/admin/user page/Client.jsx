@@ -109,136 +109,136 @@ function Client(props) {
             {/* <!-- Image Section --> */}
             <img
               className=" aspect-square rounded-xl"
-              src="https://a0.muscache.com/im/pictures/hosting/Hosting-U3RheVN1cHBseUxpc3Rpbmc6MTEzMTA4OTQ5ODA0MDcwMTE4Mw%3D%3D/original/4f7a276e-9995-4b32-bda6-300de0619b25.png?im_w=1440&im_q=highq"
+              src="https://a0.muscache.com/im/pictures/hosting/Hosting-U3RheVN1cHBseUxpc3Rpbmc6MTEzNTA4NjAxNDk3NDg1NTQ2MQ%3D%3D/original/b692ae8e-a118-4906-bf40-16855d715c02.jpeg?im_w=720"
               alt="Room Image"
             />
 
             {/* <!-- Content Section --> */}
-            <div class="pt-3">
-              <p>Ở trong ngôi nhà Purple Rain của Prince</p>
+            <div class="pt-2">
+              <p className="font-mono">London, Vương quốc Anh</p>
               <p class="text-sm text-gray-600">
                 Chủ nhà/Người tổ chức: Wendy và Lisa
               </p>
-              <p class="text-sm">Nhận đặt phòng từ tháng 9</p>
+              <p class="text-sm font-bold">₫87.520.900 / đêm</p>
             </div>
           </div>
           <div class=" bg-white">
             {/* <!-- Image Section --> */}
             <img
               className=" aspect-square rounded-xl"
-              src="https://a0.muscache.com/im/pictures/hosting/Hosting-U3RheVN1cHBseUxpc3Rpbmc6MTEzMTA4OTQ5ODA0MDcwMTE4Mw%3D%3D/original/4f7a276e-9995-4b32-bda6-300de0619b25.png?im_w=1440&im_q=highq"
+              src="https://a0.muscache.com/im/pictures/d682f7bf-caa4-4433-9038-c5f81a01845b.jpg?im_w=720"
               alt="Room Image"
             />
 
             {/* <!-- Content Section --> */}
-            <div class="pt-3">
-              <p>Ở trong ngôi nhà Purple Rain của Prince</p>
+            <div class="pt-2">
+              <p className="font-mono">Nha Trang</p>
               <p class="text-sm text-gray-600">
-                Chủ nhà/Người tổ chức: Wendy và Lisa
+                Chủ nhà/Người tổ chức: Wendy
               </p>
-              <p class="text-sm">Nhận đặt phòng từ tháng 9</p>
+              <p class="text-sm font-bold">₫2.775.005 / đêm</p>
             </div>
           </div>
           <div class=" bg-white">
             {/* <!-- Image Section --> */}
             <img
               className=" aspect-square rounded-xl"
-              src="https://a0.muscache.com/im/pictures/hosting/Hosting-U3RheVN1cHBseUxpc3Rpbmc6MTEzMTA4OTQ5ODA0MDcwMTE4Mw%3D%3D/original/4f7a276e-9995-4b32-bda6-300de0619b25.png?im_w=1440&im_q=highq"
+              src="https://a0.muscache.com/im/pictures/19292248-6cca-4b02-9860-94925b29397e.jpg?im_w=720"
               alt="Room Image"
             />
 
             {/* <!-- Content Section --> */}
-            <div class="pt-3">
-              <p>Ở trong ngôi nhà Purple Rain của Prince</p>
+            <div class="pt-2">
+              <p className="font-mono">Hà Nội</p>
               <p class="text-sm text-gray-600">
-                Chủ nhà/Người tổ chức: Wendy và Lisa
+                Chủ nhà/Người tổ chức: Khang
               </p>
-              <p class="text-sm">Nhận đặt phòng từ tháng 9</p>
+              <p class="text-sm font-bold">₫3.775.005 / đêm</p>
             </div>
           </div>
           <div class=" bg-white">
             {/* <!-- Image Section --> */}
             <img
               className=" aspect-square rounded-xl"
-              src="https://a0.muscache.com/im/pictures/hosting/Hosting-U3RheVN1cHBseUxpc3Rpbmc6MTEzMTA4OTQ5ODA0MDcwMTE4Mw%3D%3D/original/4f7a276e-9995-4b32-bda6-300de0619b25.png?im_w=1440&im_q=highq"
+              src="https://a0.muscache.com/im/pictures/miso/Hosting-678798543099234014/original/fc2c05ad-fe0e-4d86-90c1-16a0bf098984.jpeg?im_w=720"
               alt="Room Image"
             />
 
             {/* <!-- Content Section --> */}
-            <div class="pt-3">
-              <p>Ở trong ngôi nhà Purple Rain của Prince</p>
+            <div class="pt-2">
+              <p className="font-mono">Đà Nẵng</p>
               <p class="text-sm text-gray-600">
-                Chủ nhà/Người tổ chức: Wendy và Lisa
+                Chủ nhà/Người tổ chức: Fuong
               </p>
-              <p class="text-sm">Nhận đặt phòng từ tháng 9</p>
+              <p class="text-sm font-bold">₫10.222.005 / đêm</p>
             </div>
           </div>
           <div class=" bg-white">
             {/* <!-- Image Section --> */}
             <img
               className=" aspect-square rounded-xl"
-              src="https://a0.muscache.com/im/pictures/hosting/Hosting-U3RheVN1cHBseUxpc3Rpbmc6MTEzMTA4OTQ5ODA0MDcwMTE4Mw%3D%3D/original/4f7a276e-9995-4b32-bda6-300de0619b25.png?im_w=1440&im_q=highq"
+              src="https://a0.muscache.com/im/pictures/miso/Hosting-931433141813173131/original/2c8f59fc-ec00-4eae-ab5f-684fd1168b4e.jpeg?im_w=720"
               alt="Room Image"
             />
 
             {/* <!-- Content Section --> */}
-            <div class="pt-3">
-              <p>Ở trong ngôi nhà Purple Rain của Prince</p>
+            <div class="pt-2">
+              <p className="font-mono">Khánh Hòa</p>
               <p class="text-sm text-gray-600">
-                Chủ nhà/Người tổ chức: Wendy và Lisa
+                Chủ nhà/Người tổ chức: Lisa
               </p>
-              <p class="text-sm">Nhận đặt phòng từ tháng 9</p>
+              <p class="text-sm font-bold">₫775.005 / đêm</p>
             </div>
           </div>
           <div class=" bg-white">
             {/* <!-- Image Section --> */}
             <img
               className=" aspect-square rounded-xl"
-              src="https://a0.muscache.com/im/pictures/hosting/Hosting-U3RheVN1cHBseUxpc3Rpbmc6MTEzMTA4OTQ5ODA0MDcwMTE4Mw%3D%3D/original/4f7a276e-9995-4b32-bda6-300de0619b25.png?im_w=1440&im_q=highq"
+              src="https://a0.muscache.com/im/pictures/hosting/Hosting-U3RheVN1cHBseUxpc3Rpbmc6MTEzMjg5NDM4MjI4MTg0MjgwNw%3D%3D/original/710cc1c4-1ad7-49ea-a897-c3308683eea4.jpeg?im_w=720"
               alt="Room Image"
             />
 
             {/* <!-- Content Section --> */}
-            <div class="pt-3">
-              <p>Ở trong ngôi nhà Purple Rain của Prince</p>
+            <div class="pt-2">
+              <p className="font-mono">Quy Nhơn</p>
               <p class="text-sm text-gray-600">
-                Chủ nhà/Người tổ chức: Wendy và Lisa
+                Chủ nhà/Người tổ chức: Wisa
               </p>
-              <p class="text-sm">Nhận đặt phòng từ tháng 9</p>
+              <p class="text-sm font-bold">₫77.775.005 / đêm</p>
             </div>
           </div>
           <div class=" bg-white">
             {/* <!-- Image Section --> */}
             <img
               className=" aspect-square rounded-xl"
-              src="https://a0.muscache.com/im/pictures/hosting/Hosting-U3RheVN1cHBseUxpc3Rpbmc6MTEzMTA4OTQ5ODA0MDcwMTE4Mw%3D%3D/original/4f7a276e-9995-4b32-bda6-300de0619b25.png?im_w=1440&im_q=highq"
+              src="https://a0.muscache.com/im/pictures/miso/Hosting-858313563150392687/original/f47850e4-6896-4f8a-b1ac-0351c55269bd.jpeg?im_w=720"
               alt="Room Image"
             />
 
             {/* <!-- Content Section --> */}
-            <div class="pt-3">
-              <p>Ở trong ngôi nhà Purple Rain của Prince</p>
+            <div class="pt-2">
+              <p className="font-mono">Huế</p>
               <p class="text-sm text-gray-600">
-                Chủ nhà/Người tổ chức: Wendy và Lisa
+                Chủ nhà/Người tổ chức: Wenisa
               </p>
-              <p class="text-sm">Nhận đặt phòng từ tháng 9</p>
+              <p class="text-sm font-bold">₫111.225.005 / đêm</p>
             </div>
           </div>
           <div class=" bg-white">
             {/* <!-- Image Section --> */}
             <img
               className=" aspect-square rounded-xl"
-              src="https://a0.muscache.com/im/pictures/hosting/Hosting-U3RheVN1cHBseUxpc3Rpbmc6MTEzMTA4OTQ5ODA0MDcwMTE4Mw%3D%3D/original/4f7a276e-9995-4b32-bda6-300de0619b25.png?im_w=1440&im_q=highq"
+              src="https://a0.muscache.com/im/pictures/miso/Hosting-644052629444200111/original/b33b8e77-9d1a-4045-8d79-b08243ef71d3.jpeg?im_w=720"
               alt="Room Image"
             />
 
             {/* <!-- Content Section --> */}
-            <div class="pt-3">
-              <p>Ở trong ngôi nhà Purple Rain của Prince</p>
+            <div class="pt-2">
+              <p className="font-mono">Sapa</p>
               <p class="text-sm text-gray-600">
-                Chủ nhà/Người tổ chức: Wendy và Lisa
+                Chủ nhà/Người tổ chức: Wendisa
               </p>
-              <p class="text-sm">Nhận đặt phòng từ tháng 9</p>
+              <p class="text-sm font-bold">₫43.331.114 / đêm</p>
             </div>
           </div>
         </div>
@@ -248,10 +248,16 @@ function Client(props) {
           Nguồn cảm hứng cho những kì nghỉ sau này
         </p>
         <div className="list_item flex p-3 border-b   ">
-          <button onClick={() => showData('data1')}  className="me-4 font-medium text-sm text-gray-500 p-2">
+          <button
+            onClick={() => showData("data1")}
+            className="me-4 font-medium text-sm text-gray-500 p-2"
+          >
             Phổ biến
           </button>
-          <button onClick={() => showData('data2')} className="me-4 font-medium text-sm text-gray-500 p-2">
+          <button
+            onClick={() => showData("data2")}
+            className="me-4 font-medium text-sm text-gray-500 p-2"
+          >
             Văn hóa và nghệ thuật
           </button>
           <button className="me-4 font-medium text-sm text-gray-500 p-2">
@@ -276,55 +282,53 @@ function Client(props) {
             class="data-section  grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6 p-4 border-b"
           >
             <div className="select-1">
-            <span className="font-bold">Canmore</span>
-            <p className="font-extralight">Nhà cho thuê</p>
+              <span className="font-bold">Canmore</span>
+              <p className="font-extralight">Nhà cho thuê</p>
             </div>
             <div className="select-1">
-            <span className="font-bold">Benalmádena</span>
-            <p className="font-extralight">Căn hộ cao cấp</p>
+              <span className="font-bold">Benalmádena</span>
+              <p className="font-extralight">Căn hộ cao cấp</p>
             </div>
             <div className="select-1">
-            <span className="font-bold">Đà Nẵng</span>
-            <p className="font-extralight">Căn hộ cao cấp</p>
+              <span className="font-bold">Đà Nẵng</span>
+              <p className="font-extralight">Căn hộ cao cấp</p>
             </div>
             <div className="select-1">
-            <span className="font-bold">Hội An</span>
-            <p className="font-extralight">Khách sạn view biển</p>
+              <span className="font-bold">Hội An</span>
+              <p className="font-extralight">Khách sạn view biển</p>
             </div>
             <div className="select-1">
-            <span className="font-bold">Nha Trang</span>
-            <p className="font-extralight">Khách sạn view biển</p>
+              <span className="font-bold">Nha Trang</span>
+              <p className="font-extralight">Khách sạn view biển</p>
             </div>
             <div className="select-1">
-            <span className="font-bold">Quy Nhơn</span>
-            <p className="font-extralight">Căn hộ view biển</p>
+              <span className="font-bold">Quy Nhơn</span>
+              <p className="font-extralight">Căn hộ view biển</p>
             </div>
             <div className="select-1">
-            <span className="font-bold">Hà Nội</span>
-            <p className="font-extralight">Khách sạn cao cấp</p>
+              <span className="font-bold">Hà Nội</span>
+              <p className="font-extralight">Khách sạn cao cấp</p>
             </div>
             <div className="select-1">
-            <span className="font-bold">Đà Lạt</span>
-            <p className="font-extralight">Căn hộ cao cấp</p>
+              <span className="font-bold">Đà Lạt</span>
+              <p className="font-extralight">Căn hộ cao cấp</p>
             </div>
             <div className="select-1">
-            <span className="font-bold">Vũng Tàu</span>
-            <p className="font-extralight">Cabin cho thuê</p>
+              <span className="font-bold">Vũng Tàu</span>
+              <p className="font-extralight">Cabin cho thuê</p>
             </div>
             <div className="select-1">
-            <span className="font-bold">Huế</span>
-            <p className="font-extralight">Khách sạn</p>
+              <span className="font-bold">Huế</span>
+              <p className="font-extralight">Khách sạn</p>
             </div>
             <div className="select-1">
-            <span className="font-bold">Bình Định</span>
-            <p className="font-extralight">Căn hộ cho thuê</p>
+              <span className="font-bold">Bình Định</span>
+              <p className="font-extralight">Căn hộ cho thuê</p>
             </div>
             <div className="select-1">
-            <span className="font-bold">Sapa</span>
-            <p className="font-extralight">Nhà cho thuê</p>
+              <span className="font-bold">Sapa</span>
+              <p className="font-extralight">Nhà cho thuê</p>
             </div>
-            
-            
           </div>
 
           {/* <!-- Data Section 2 --> */}
@@ -332,54 +336,54 @@ function Client(props) {
             id="data2"
             class="data-section p-4 hidden grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6 border-b"
           >
-           <div className="select-1">
-            <span className="font-bold">Phoenix</span>
-            <p className="font-extralight">Căn hộ cao cấp</p>
+            <div className="select-1">
+              <span className="font-bold">Phoenix</span>
+              <p className="font-extralight">Căn hộ cao cấp</p>
             </div>
             <div className="select-1">
-            <span className="font-bold">Hot Springs</span>
-            <p className="font-extralight">Nhà cho thuê</p>
+              <span className="font-bold">Hot Springs</span>
+              <p className="font-extralight">Nhà cho thuê</p>
             </div>
             <div className="select-1">
-            <span className="font-bold">Los Angeles</span>
-            <p className="font-extralight">Khách sạn view biển</p>
+              <span className="font-bold">Los Angeles</span>
+              <p className="font-extralight">Khách sạn view biển</p>
             </div>
             <div className="select-1">
-            <span className="font-bold">San Diego</span>
-            <p className="font-extralight">Căn hộ cao cấp</p>
+              <span className="font-bold">San Diego</span>
+              <p className="font-extralight">Căn hộ cao cấp</p>
             </div>
             <div className="select-1">
-            <span className="font-bold">San Francisco</span>
-            <p className="font-extralight">Căn hộ view biển</p>
+              <span className="font-bold">San Francisco</span>
+              <p className="font-extralight">Căn hộ view biển</p>
             </div>
             <div className="select-1">
-            <span className="font-bold">Barcelona</span>
-            <p className="font-extralight">Khách sạn view biển</p>
+              <span className="font-bold">Barcelona</span>
+              <p className="font-extralight">Khách sạn view biển</p>
             </div>
             <div className="select-1">
-            <span className="font-bold">Paris</span>
-            <p className="font-extralight">Căn hộ cao cấp</p>
+              <span className="font-bold">Paris</span>
+              <p className="font-extralight">Căn hộ cao cấp</p>
             </div>
             <div className="select-1">
-            <span className="font-bold">London</span>
-            <p className="font-extralight">Khách sạn cao cấp</p>
+              <span className="font-bold">London</span>
+              <p className="font-extralight">Khách sạn cao cấp</p>
             </div>
             <div className="select-1">
-            <span className="font-bold">Scarborough</span>
-            <p className="font-extralight">Khách sạn</p>
+              <span className="font-bold">Scarborough</span>
+              <p className="font-extralight">Khách sạn</p>
             </div>
             <div className="select-1">
-            <span className="font-bold">Rhodes</span>
-            <p className="font-extralight">Cabin cho thuê</p>
+              <span className="font-bold">Rhodes</span>
+              <p className="font-extralight">Cabin cho thuê</p>
             </div>
             <div className="select-1">
-            <span className="font-bold">Sherwood Forest</span>
-            <p className="font-extralight">Cabin cho thuê</p>
+              <span className="font-bold">Sherwood Forest</span>
+              <p className="font-extralight">Cabin cho thuê</p>
             </div>
             <div className="select-1">
-            <span className="font-bold">Washington</span>
-            <p className="font-extralight">Cabin cho thuê</p>
-            </div>   
+              <span className="font-bold">Washington</span>
+              <p className="font-extralight">Cabin cho thuê</p>
+            </div>
           </div>
         </div>
       </div>
@@ -389,17 +393,27 @@ function Client(props) {
           <p className="mb-1 text-sm font-extralight">Trung tâm trợ giúp</p>
           <p className="mb-1 text-sm font-extralight">AirCover</p>
           <p className="mb-1 text-sm font-extralight">Chống phân biệt đối xử</p>
-          <p className="mb-1 text-sm font-extralight">Hỗ trợ người khuyết tật</p>
+          <p className="mb-1 text-sm font-extralight">
+            Hỗ trợ người khuyết tật
+          </p>
           <p className="mb-1 text-sm font-extralight">Các tùy chọn hủy</p>
-          <p className="mb-1 text-sm font-extralight">Báo cáo lo ngại của khu dân cư</p>
+          <p className="mb-1 text-sm font-extralight">
+            Báo cáo lo ngại của khu dân cư
+          </p>
         </div>
         <div className="footer-center ">
           <p className="mb-1 text-sm font-bold">Đón tiếp khách</p>
-          <p className="mb-1 text-sm font-extralight">Cho thuê nhà trên Airbnb</p>
+          <p className="mb-1 text-sm font-extralight">
+            Cho thuê nhà trên Airbnb
+          </p>
           <p className="mb-1 text-sm font-extralight">AirCover cho Chủ nhà</p>
-          <p className="mb-1 text-sm font-extralight">Tài nguyên về đón tiếp khách</p>
+          <p className="mb-1 text-sm font-extralight">
+            Tài nguyên về đón tiếp khách
+          </p>
           <p className="mb-1 text-sm font-extralight">Diễn đàn cộng đồng</p>
-          <p className="mb-1 text-sm font-extralight">Đón tiếp khách có trách nhiệm</p>
+          <p className="mb-1 text-sm font-extralight">
+            Đón tiếp khách có trách nhiệm
+          </p>
           <p className="mb-1 text-sm font-extralight">Tham gia khóa học</p>
         </div>
         <div className="footer-right ">
@@ -408,21 +422,23 @@ function Client(props) {
           <p className="mb-1 text-sm font-extralight">Tính năng mới</p>
           <p className="mb-1 text-sm font-extralight">Cơ hội nghề nghiệp</p>
           <p className="mb-1 text-sm font-extralight">Nhà đầu tư</p>
-          <p className="mb-1 text-sm font-extralight">Chỗ ở khẩn cấp Airbnb.org</p>
+          <p className="mb-1 text-sm font-extralight">
+            Chỗ ở khẩn cấp Airbnb.org
+          </p>
         </div>
       </footer>
       <div className="final-footer  grid grid-cols-3 md:grid-cols-3 lg:grid-cols-3 gap-6 p-5">
         <div className="left">
-          <p className="font-thin">© 2024 Inc.·Quyền riêng tư·Điều khoản·Sơ đồ trang web</p>
+          <p className="font-thin">
+            © 2024 Inc.·Quyền riêng tư·Điều khoản·Sơ đồ trang web
+          </p>
         </div>
         <div className="a"></div>
         <div className="right text-end">
-        <span className="me-2 font-thin">Tiếng Việt (VN)-VND</span>
-        <i class="fa-brands fa-square-facebook text-xl me-1"></i>
-        <i class="fa-brands fa-square-instagram text-xl me-1"></i>
-        <i class="fa-brands fa-square-twitter text-xl"></i>
-
-
+          <span className="me-2 font-thin">Tiếng Việt (VN)-VND</span>
+          <i class="fa-brands fa-square-facebook text-xl me-1"></i>
+          <i class="fa-brands fa-square-instagram text-xl me-1"></i>
+          <i class="fa-brands fa-square-twitter text-xl"></i>
         </div>
       </div>
     </div>
