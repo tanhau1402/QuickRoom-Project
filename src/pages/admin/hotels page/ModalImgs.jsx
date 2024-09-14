@@ -12,7 +12,8 @@ import {
 function ModalImgs({ setImgsModal, imgsModal, imgList }) {
   console.log(imgList);
   return (
-    <div>
+    <div >
+      <div className="relative">
       <Dialog
         open={imgsModal}
         onClose={setImgsModal}
@@ -30,16 +31,19 @@ function ModalImgs({ setImgsModal, imgsModal, imgList }) {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button
+          
+            <div >
+            <i
             onClick={() => setImgsModal(false)}
-            sx={{ padding: "5px" }}
-            variant="contained"
-            color="primary"
-          >
-            Return
-          </Button>
+            
+             class="fa-solid fa-circle-xmark top-[-10px] right-[-10px] hover:text-red-800 text-3xl absolute ">
+             </i>
+            </div>
+          
         </DialogActions>
       </Dialog>
+      </div>
+      
     </div>
   );
 }

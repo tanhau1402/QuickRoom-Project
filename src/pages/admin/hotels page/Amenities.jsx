@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 
 import {
+  TablePagination,
   Modal,
   Box,
   Button,
@@ -23,6 +24,8 @@ import ModalDelete from "./ModalDelete";
 
 function Amenities() {
   const [open, setOpen] = useState(false);
+  const [page, setPage] = useState(0); // Trang hiện tại
+  const [rowsPerPage, setRowsPerPage] = useState(5); 
   const [amenity, setAmenity] = useState({});
   const [amenities, setAmenities] = useState([]);
   const [errors, setErrors] = useState({ name: "", icon: "" });
@@ -108,9 +111,9 @@ function Amenities() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {amenities.map((amenity, index) => (
+            {amenities.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((amenity, index) => (
               <TableRow key={index}>
-                <TableCell align="center">{index + 1}</TableCell>
+                <TableCell align="center">{page * rowsPerPage + index + 1}</TableCell>
                 <TableCell align="center">{amenity.name}</TableCell>
                 <TableCell align="center">
                   {" "}
@@ -145,6 +148,18 @@ function Amenities() {
             ))}
           </TableBody>
         </Table>
+        <TablePagination
+          rowsPerPageOptions={[5, 10, 25]}
+          component="div"
+          count={amenities.length}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          onPageChange={(event, newPage) => setPage(newPage)}
+          onRowsPerPageChange={(event) => {
+            setRowsPerPage(parseInt(event.target.value, 10));
+            setPage(0);
+          }}
+        />
       </TableContainer>
 
       <Modal open={open} onClose={handleClose}>
