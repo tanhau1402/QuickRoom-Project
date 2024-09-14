@@ -15,16 +15,22 @@ export const fetchDocuments = async (collectionName) => {
     return documents;
 };
 
-// Thêm tài liệu mới vào một bộ sưu tập cụ thể với tùy chọn tải lên hình ảnh
-export const addDocument = async (collectionName, values, imgUpload) => {
-    try {
-        if (imgUpload) {
-            const storageRef = ref(storage, `${collectionName}/${uuidv4()}`);
-            await uploadBytes(storageRef, imgUpload);
-            const imgUrl = await getDownloadURL(storageRef);
-            values.imgUrl = imgUrl; // Lưu URL vào đối tượng values
-            console.log(values);
+export const addDocument = async (collectionName, values, imgUploads) => {
+    try {       
+        // Nếu có hình ảnh để tải lên
+        if (imgUploads && imgUploads.length > 0) {
+            // Tạo một danh sách các promises để tải lên tất cả các hình ảnh
+            const uploadPromises = imgUploads.map(async (imgUpload) => {
+                const storageRef = ref(storage, `${collectionName}/${uuidv4()}`);
+                await uploadBytes(storageRef, imgUpload);
+                return getDownloadURL(storageRef); // Trả về URL của hình ảnh
+            });
+            // Chờ tất cả các hình ảnh được tải lên và lấy URL của chúng
+            const imgUrls = await Promise.all(uploadPromises);
+            // Cập nhật đối tượng values với danh sách các URL
+            values.imgUrls = imgUrls;
         }
+        // Thêm tài liệu mới vào bộ sưu tập
         await addDoc(collection(db, collectionName), values);
     } catch (error) {
         console.error('Error adding document:', error);

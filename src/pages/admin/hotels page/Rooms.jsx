@@ -26,15 +26,21 @@ import {
 } from "../../../services/FirebaseService";
 import ModalDelete from "./ModalDelete";
 import { ContextAmenities } from "../../../context/AmenitiesContext";
+import ModalImgs from "./ModalImgs";
 function Rooms(props) {
   const [listRooms, setListRooms] = useState([]);
-  const [selectedRoomType, setSelectedRoomType] = useState("");
+  const [preViewImg,setPreviewImg] = useState([]);
+  const [imgUpload,setImgUpload] = useState([]);
+
+
   const [room, setRoom] = useState([]);
   const [listAmenities, setListAmenities] = useState([]);
   const [open, setOpen] = useState(false);
+  const [imgList,setImgList] = useState([]);
   const [update, setUpdate] = useState(false);
   const [deleteId, setDeleteId] = useState(null);
   const [deleteModal, setDeleteModal] = useState(false);
+  const [imgsModal,setImgsModal] = useState(false);
   const amenities = useContext(ContextAmenities);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -43,7 +49,7 @@ function Rooms(props) {
     setListAmenities((prev) => {
       let updatedAmenities;
       const idAmenity = prev.find((a) => a === id);
-  
+
       if (idAmenity) {
         // Remove the amenity if it's already in the list
         updatedAmenities = prev.filter((a) => a !== id);
@@ -51,15 +57,14 @@ function Rooms(props) {
         // Add the amenity if it's not in the list
         updatedAmenities = [...prev, id];
       }
-  
+
       // Update the room with the new list of amenities
       setRoom({ ...room, listAmenities: updatedAmenities });
-  
+
       return updatedAmenities; // Update listAmenities state
     });
   };
-  
-  console.log(room);
+
   useEffect(() => {
     const fetchData = async () => {
       const roomsData = await fetchDocuments("listRooms");
@@ -72,10 +77,39 @@ function Rooms(props) {
     if (room.id) {
       await updateDocument("listRooms", room.id, room);
     } else {
-      await addDocument("listRooms", room);
+      
+      await addDocument("listRooms", room, imgUpload);
     }
     setUpdate(!update);
     handleClose();
+  };
+  
+  const handleImageUpload = (e) => {
+    const files = Array.from(e.target.files);
+
+    // Sử dụng FileReader để đọc từng file và lưu các URL xem trước
+    const fileReaders = files.map(file => {
+        return new Promise((resolve) => {
+            const reader = new FileReader();
+            reader.onload = () => {
+                resolve(reader.result); // Trả về data URL
+            };
+            reader.readAsDataURL(file); // Đọc file dưới dạng data URL
+        });
+    });
+
+    // Đợi tất cả các FileReader hoàn thành và lưu các data URL vào previewImg
+    Promise.all(fileReaders).then((urls) => {
+        setPreviewImg((prev) => [...prev, ...urls]); // Cập nhật danh sách xem trước hình ảnh
+        setImgUpload((prevFiles) => [...prevFiles, ...files]); // Cập nhật danh sách tệp hình ảnh để tải lên
+    }).catch((error) => {
+        console.error("Error reading files:", error);
+    });
+};
+
+
+  const isAmenitySelected = (id) => {
+    return listAmenities.includes(id);
   };
 
   const handleDelete = async () => {
@@ -85,15 +119,21 @@ function Rooms(props) {
       setDeleteModal(false);
     }
   };
+  const deleteImg = (index) => {
+    setImgUpload((prevImages) => prevImages.filter((_, i) => i !== index));
+  }
   const clearRoom = () => {
     handleOpen();
     setRoom({});
-  }
+  };
 
-  function amenityopen(id) {
-       const open = listAmenities.find(a => a == id);
-    
-       return open ? open : "";
+  const handleOpenEdit = (room) => {
+    setOpen(true);
+    setRoom(room);
+    setListAmenities(room.listAmenities || []); // Load selected amenities
+  };
+  const showimages = (room) => {
+
   }
   return (
     <div>
@@ -120,6 +160,7 @@ function Rooms(props) {
         <Table>
           <TableHead>
             <TableRow>
+              <TableCell align="center">Room ID</TableCell>
               <TableCell align="center">Room Type</TableCell>
               <TableCell align="center">Price Per Night</TableCell>
               <TableCell align="center">Available</TableCell>
@@ -130,16 +171,37 @@ function Rooms(props) {
           <TableBody>
             {listRooms.map((room, index) => (
               <TableRow key={index}>
+                <TableCell align="center">{index + 1}</TableCell>
                 <TableCell align="center">{room.type}</TableCell>
                 <TableCell align="center">{room.price_per_night}</TableCell>
                 <TableCell align="center">{room.available}</TableCell>
-                <TableCell align="center">{room.amenity}</TableCell>
                 <TableCell align="center">
+                  {room.listAmenities && room.listAmenities.length > 0
+                    ? room.listAmenities.map((amenityId, i) => {
+                        const amenity = amenities.find(
+                          (a) => a.id === amenityId
+                        );
+                        return amenity ? (
+                          <i
+                            key={i}
+                            className={amenity.icon}
+                            style={{ marginRight: "10px" }}
+                          ></i>
+                        ) : null;
+                      })
+                    : "No amenities"}
+                </TableCell>
+                <TableCell align="center">
+                <Button
+                    onClick={() => {setImgsModal(true); setImgList(room.imgUrls)}}
+                    sx={{ padding: "10px", mr: 1 }}
+                    variant="contained"
+                    color="primary"
+                  >
+                    <i class="fa-solid fa-images"></i>
+                  </Button>
                   <Button
-                    onClick={() => {
-                      setOpen(true);
-                      setRoom(room);
-                    }}
+                    onClick={() => handleOpenEdit(room)}
                     sx={{ padding: "10px", mr: 1 }}
                     variant="contained"
                     color="primary"
@@ -199,6 +261,7 @@ function Rooms(props) {
               id="room-available-select"
               style={{ marginBottom: "10px" }}
               label="Room Available"
+              value={room.available}
               onChange={(e) => setRoom({ ...room, available: e.target.value })}
             >
               {listAvailable.map((type, index) => (
@@ -217,7 +280,7 @@ function Rooms(props) {
               style={{
                 position: "relative",
                 top: "-20px",
-               
+
                 color: "#333",
               }}
             >
@@ -234,9 +297,10 @@ function Rooms(props) {
               {amenities.map((amenity) => (
                 <Button
                   key={amenity.id}
+                  value={room.amenity}
                   onClick={() => handleAmenities(amenity.id)}
                   variant={
-                    amenityopen(amenity.id) ? "contained" : "outlined"
+                    isAmenitySelected(amenity.id) ? "contained" : "outlined"
                   }
                   style={{
                     display: "flex",
@@ -250,7 +314,33 @@ function Rooms(props) {
               ))}
             </div>
           </FormControl>
+          {/* Image URL Input */}
+          <InputLabel          
+              style={{        
+                color: "#333",
+                textAlign: "center"
+              }}
+            >
+              Images Amenity
+            </InputLabel>
 
+          {/* File Upload Input */}
+          <input
+            type="file"
+            accept="image/*"
+            onChange={(e) => handleImageUpload(e)}
+            style={{ marginBottom: "10px", marginTop: "10px" }}
+          />
+
+          {/* Image Preview */}
+          <div className="grid grid-cols-3 md:grid-cols-3 lg:grid-cols-3 gap-6">
+        {preViewImg.map((image, index) => (
+          <div className="relative mt-3" >
+          <img key={index} src={image} alt={`Uploaded ${index}`} style={{ maxWidth: "100%", height: "auto", marginBottom: "10px" }} />
+          <i onClick={() => deleteImg(index)}  class="fa-solid fa-trash-can top-[-10px] left-[-10px] absolute hover:text-red-700 text-black text-2xl"></i>
+          </div>
+        ))}
+        </div>
           <Box className="flex justify-end mt-4">
             <Button variant="contained" color="primary" onClick={handleSubmit}>
               {room.id ? "UPDATE" : "Save"}
@@ -271,6 +361,13 @@ function Rooms(props) {
         deleteModal={deleteModal}
         handleDelete={handleDelete}
       />
+      <ModalImgs 
+      setImgsModal={setImgsModal}
+      imgsModal={imgsModal}
+      imgList={imgList}
+       />
+
+      
     </div>
   );
 }
