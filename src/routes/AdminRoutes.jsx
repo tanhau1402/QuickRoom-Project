@@ -9,6 +9,7 @@ import Rooms from '../pages/admin/hotels page/Rooms';
 import Amenities from '../pages/admin/hotels page/Amenities';
 import Bookings from '../pages/admin/booking page/Bookings';
 import Payments from '../pages/admin/booking page/Payments';
+import Location from '../pages/admin/hotels page/Location';
 import { Route, Routes } from 'react-router-dom';
 
 function AdminRoutes(props) {
@@ -41,8 +42,8 @@ function AdminRoutes(props) {
       },
       {
         id : 6,
-        path : "/roomsimages",
-        page : RoomsImages
+        path : "/location",
+        page : Location
       },
       {
         id : 7,

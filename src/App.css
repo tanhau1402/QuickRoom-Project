@@ -5,9 +5,23 @@
     display: none;
   }
 }
+.grid-container {
+  display: grid;
+  grid-template-columns: 7fr 3fr; /* Chia cột theo tỷ lệ 7/3 */
+  width: 100%;
+}
 .zoom-on-hover {
   transition: transform 0.3s ease;
 }
 .zoom-on-hover:hover {
   transform: scale(1.1) ;
+}
+/* CSS cho react-slick carousel */
+.slick-prev:before,
+.slick-next:before {
+  color: black;
+}
+
+.slick-dots li button:before {
+  color: black;
 }

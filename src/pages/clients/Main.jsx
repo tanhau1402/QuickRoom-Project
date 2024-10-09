@@ -1,5 +1,19 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
+import { ContextRooms } from "../../context/RoomContext";
+import { ContextAmenities } from "../../context/AmenitiesContext";
+import {
+  Card,
+  CardContent,
+  Typography,
+  Box,
+  IconButton,
+  Rating,
+} from "@mui/material";
 
+import Slider from "react-slick";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+import { Link } from "react-router-dom";
 function showData(dataId) {
   // Hide all data sections first
   document.querySelectorAll(".data-section").forEach((section) => {
@@ -8,161 +22,103 @@ function showData(dataId) {
   // Show the selected data section
   document.getElementById(dataId).classList.remove("hidden");
 }
+const settings = {
+  dots: true,
+  infinite: true,
+  speed: 500,
+  slidesToShow: 1,
+  slidesToScroll: 1,
+  arrows: true,
+};
 function Main(props) {
+  const amenities = useContext(ContextAmenities);
+  const [amenity, setAmenity] = useState(null);
+  const rooms = useContext(ContextRooms);
+  const filteredRooms = rooms.filter((room) => {
+    if (amenity) {
+      return room.listAmenities.some((a) => a == amenity);
+    } else {
+      return room;
+    }
+  });
+
   return (
     <div>
       <div className="main p-5">
-      <div className="list-amenities flex text-center justify-center   p-2">
-        <div className="item-1 me-2 hover:text-white w-32 p-3 rounded-bl-2xl rounded-tl-2xl hover:bg-gray-600">
-          <i class="fa-solid text-2xl fa-dumbbell"></i>
-          <p className="text-gray-500 font-extralight">Gym</p>
+        <div className="list-amenities flex text-center justify-center p-2">
+          {amenities.map((amenity) => (
+            <div
+              onClick={() => setAmenity(amenity.id)}
+              className="flex-1 hover:bg-red-500 hover:text-white"
+            >
+              <li
+                key={amenity.id}
+                style={{
+                  fontSize: "27px",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  padding: "10px",
+                }}
+              >
+                <i className={amenity.icon}></i>
+              </li>
+              <p>{amenity.name}</p>
+            </div>
+          ))}
         </div>
-        <div className="item-2 me-2  hover:text-white w-32 p-3 hover:bg-gray-600">
-          <i class="fa-solid text-2xl fa-bicycle"></i>
-          <p className="text-gray-500 font-extralight">Đạp xe</p>
-        </div>
-        <div className="item-3  me-2 hover:text-white w-32 p-3  hover:bg-gray-600">
-          <i class="fa-solid text-2xl fa-person-snowboarding"></i>
-          <p className="text-gray-500  font-extralight">Trượt tuyết</p>
-        </div>
-        <div className="item-4 me-2 hover:text-white w-32 p-3 hover:bg-gray-600">
-          <i class="fa-solid text-2xl fa-volleyball"></i>
-          <p className="text-gray-500  font-extralight">Bóng chuyền</p>
-        </div>
-        <div className="item-5 me-2  hover:text-white p-3 w-32   hover:bg-gray-600">
-          <i class="fa-solid text-2xl fa-golf-ball-tee"></i>
-          <p className="text-gray-500 font-extralight">Chơi golf</p>
-        </div>
-        <div className="item-6   hover:text-white p-3  w-32 rounded-br-2xl rounded-tr-2xl hover:bg-gray-600">
-          <i class="fa-solid text-2xl fa-table-tennis-paddle-ball"></i>
-          <p className="text-gray-500 font-extralight">Bóng bàn</p>
-        </div>
-      </div>
+
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 p-4">
-          <div class=" bg-white">
-            {/* <!-- Image Section --> */}
-            <img
-              className=" aspect-square rounded-xl"
-              src="https://a0.muscache.com/im/pictures/hosting/Hosting-U3RheVN1cHBseUxpc3Rpbmc6MTEzNTA4NjAxNDk3NDg1NTQ2MQ%3D%3D/original/b692ae8e-a118-4906-bf40-16855d715c02.jpeg?im_w=720"
-              alt="Room Image"
-            />
-
-            {/* <!-- Content Section --> */}
-            <div class="pt-2">
-              <p className="font-mono">London, Vương quốc Anh</p>
-              <p class="text-sm text-gray-600">
-                Chủ nhà/Người tổ chức: Wendy và Lisa
-              </p>
-              <p class="text-sm font-bold">₫87.520.900 / đêm</p>
-            </div>
-          </div>
-          <div class=" bg-white">
-            {/* <!-- Image Section --> */}
-            <img
-              className=" aspect-square rounded-xl"
-              src="https://a0.muscache.com/im/pictures/d682f7bf-caa4-4433-9038-c5f81a01845b.jpg?im_w=720"
-              alt="Room Image"
-            />
-
-            {/* <!-- Content Section --> */}
-            <div class="pt-2">
-              <p className="font-mono">Nha Trang</p>
-              <p class="text-sm text-gray-600">Chủ nhà/Người tổ chức: Wendy</p>
-              <p class="text-sm font-bold">₫2.775.005 / đêm</p>
-            </div>
-          </div>
-          <div class=" bg-white">
-            {/* <!-- Image Section --> */}
-            <img
-              className=" aspect-square rounded-xl"
-              src="https://a0.muscache.com/im/pictures/19292248-6cca-4b02-9860-94925b29397e.jpg?im_w=720"
-              alt="Room Image"
-            />
-
-            {/* <!-- Content Section --> */}
-            <div class="pt-2">
-              <p className="font-mono">Hà Nội</p>
-              <p class="text-sm text-gray-600">Chủ nhà/Người tổ chức: Khang</p>
-              <p class="text-sm font-bold">₫3.775.005 / đêm</p>
-            </div>
-          </div>
-          <div class=" bg-white">
-            {/* <!-- Image Section --> */}
-            <img
-              className=" aspect-square rounded-xl"
-              src="https://a0.muscache.com/im/pictures/miso/Hosting-678798543099234014/original/fc2c05ad-fe0e-4d86-90c1-16a0bf098984.jpeg?im_w=720"
-              alt="Room Image"
-            />
-
-            {/* <!-- Content Section --> */}
-            <div class="pt-2">
-              <p className="font-mono">Đà Nẵng</p>
-              <p class="text-sm text-gray-600">Chủ nhà/Người tổ chức: Fuong</p>
-              <p class="text-sm font-bold">₫10.222.005 / đêm</p>
-            </div>
-          </div>
-          <div class=" bg-white">
-            {/* <!-- Image Section --> */}
-            <img
-              className=" aspect-square rounded-xl"
-              src="https://a0.muscache.com/im/pictures/miso/Hosting-931433141813173131/original/2c8f59fc-ec00-4eae-ab5f-684fd1168b4e.jpeg?im_w=720"
-              alt="Room Image"
-            />
-
-            {/* <!-- Content Section --> */}
-            <div class="pt-2">
-              <p className="font-mono">Khánh Hòa</p>
-              <p class="text-sm text-gray-600">Chủ nhà/Người tổ chức: Lisa</p>
-              <p class="text-sm font-bold">₫775.005 / đêm</p>
-            </div>
-          </div>
-          <div class=" bg-white">
-            {/* <!-- Image Section --> */}
-            <img
-              className=" aspect-square rounded-xl"
-              src="https://a0.muscache.com/im/pictures/hosting/Hosting-U3RheVN1cHBseUxpc3Rpbmc6MTEzMjg5NDM4MjI4MTg0MjgwNw%3D%3D/original/710cc1c4-1ad7-49ea-a897-c3308683eea4.jpeg?im_w=720"
-              alt="Room Image"
-            />
-
-            {/* <!-- Content Section --> */}
-            <div class="pt-2">
-              <p className="font-mono">Quy Nhơn</p>
-              <p class="text-sm text-gray-600">Chủ nhà/Người tổ chức: Wisa</p>
-              <p class="text-sm font-bold">₫77.775.005 / đêm</p>
-            </div>
-          </div>
-          <div class=" bg-white">
-            {/* <!-- Image Section --> */}
-            <img
-              className=" aspect-square rounded-xl"
-              src="https://a0.muscache.com/im/pictures/miso/Hosting-858313563150392687/original/f47850e4-6896-4f8a-b1ac-0351c55269bd.jpeg?im_w=720"
-              alt="Room Image"
-            />
-
-            {/* <!-- Content Section --> */}
-            <div class="pt-2">
-              <p className="font-mono">Huế</p>
-              <p class="text-sm text-gray-600">Chủ nhà/Người tổ chức: Wenisa</p>
-              <p class="text-sm font-bold">₫111.225.005 / đêm</p>
-            </div>
-          </div>
-          <div class=" bg-white">
-            {/* <!-- Image Section --> */}
-            <img
-              className=" aspect-square rounded-xl"
-              src="https://a0.muscache.com/im/pictures/miso/Hosting-644052629444200111/original/b33b8e77-9d1a-4045-8d79-b08243ef71d3.jpeg?im_w=720"
-              alt="Room Image"
-            />
-
-            {/* <!-- Content Section --> */}
-            <div class="pt-2">
-              <p className="font-mono">Sapa</p>
-              <p class="text-sm text-gray-600">
-                Chủ nhà/Người tổ chức: Wendisa
-              </p>
-              <p class="text-sm font-bold">₫43.331.114 / đêm</p>
-            </div>
-          </div>
+          {filteredRooms.map((room) => (
+            <Link to={`detail/${room.id}`}>
+            <Card sx={{ maxWidth: 345, borderRadius: 2, boxShadow: 3 }}>
+              <Box sx={{ position: "relative" }}>
+                <Slider {...settings}>
+                  {room.imgUrls.map((img, index) => (
+                    <div key={index}>
+                      <img
+                        src={img}
+                        alt={`Property ${index}`}
+                        style={{
+                          width: "100%",
+                          height: "250px",
+                          objectFit: "cover",
+                        }}
+                      />
+                    </div>
+                  ))}
+                </Slider>
+                <IconButton
+                  sx={{
+                    position: "absolute",
+                    top: 10,
+                    right: 10,
+                    "&:hover": {
+                      color: "red",
+                    },
+                  }}
+                >
+                  <i class="fa-regular fa-heart"></i>
+                </IconButton>
+              </Box>
+              <CardContent>
+                <Typography variant="body2">
+                  {room.available}
+                </Typography>
+                <Typography variant="body1" color="textSecondary">Person : {room.persons}</Typography>
+                <Typography variant="body1" color="textSecondary">
+                  Animals : {room.animals}
+                </Typography>
+                <Typography
+                  color="textPrimary"
+                  sx={{ marginTop: 1 }}
+                >
+                  {room.price_per_night} USD
+                </Typography>
+              </CardContent>
+            </Card>
+            </Link>
+          ))}
         </div>
       </div>
       <div className="main-bottom p-5 ">
@@ -308,6 +264,8 @@ function Main(props) {
             </div>
           </div>
         </div>
+      </div>
+      <div>
       </div>
     </div>
   );

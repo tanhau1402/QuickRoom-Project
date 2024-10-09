@@ -60,13 +60,16 @@ export const updateDocument = async (collectionName, docId, values, imgUpload, o
 export const deleteDocument = async (collectionName, docId, imgUrl) => {
     await deleteDoc(doc(collection(db, collectionName), docId));
 
-    // Delete the associated image if it exists
+    // Delete the associated image(s) if they exist
     if (imgUrl) {
-        const filename = imgUrl.split('%2F').pop().split('?').shift();
-        const imgRef = ref(storage, `${collectionName}/${filename}`);
-        await deleteObject(imgRef);
+        imgUrl.map(async (element) => {  // Correctly define 'element'
+            const filename = element.split('%2F').pop().split('?').shift();
+            const imgRef = ref(storage, `${collectionName}/${filename}`);
+            await deleteObject(imgRef);
+        });
     }
 };
+
 
 // Hàm để đăng ký một bộ sưu tập và gọi lại một callback với dữ liệu mới
 export const subscribeToCollection = (collectionName, callback) => {

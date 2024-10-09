@@ -1,26 +1,38 @@
-import React from "react";
-
-function Nav(props) {
+import {React,useState} from "react";
+import ModalLogin from "../admin/hotels page/ModalLogin";
+import { Link } from "react-router-dom";
+import { useContext } from 'react';
+ import { ContextLogin } from '../../context/LoginContext';
+function  Nav(props) {
+  const [loginModal, setLoginModal] = useState(false);
+  const loginData = useContext(ContextLogin);
+  console.log(loginData);
   return (
     <div>
+      
       <div class="bg-white shadow-md">
         {/* <!-- Top Navbar --> */}
         <div class="flex items-center justify-between px-6 py-4">
           {/* <!-- Logo --> */}
           <div class="flex items-center">
-            <img
+          <Link  to="/">
+          <img
               src="https://e7.pngegg.com/pngimages/998/205/png-clipart-airbnb-logo-business-braintree-management-business-text-service.png"
               alt="airbnb logo"
               class="h-8 mr-4"
             />
+          </Link>
           </div>
           {/* <!-- Right Menu --> */}
           <div class="flex items-center border rounded-full p-1">
-            <button class="p-1 rounded-full flex justify-center  hover:bg-gray-100 me-1">
+            <button onClick={() => setLoginModal(true)} class="p-1 rounded-full flex justify-center  hover:bg-gray-100 me-1">
               <div>
                 <i class="fa-solid fa-bars me-3 p-2 "></i>
               </div>
-              <div class="h-8 w-8 rounded-full bg-gray-300"></div>
+              {loginData.map((data) => (
+                <img src={data.imgUrl} className="h-8 w-8 rounded-full"/>
+              )
+              )}
             </button>
           </div>
         </div>
@@ -68,6 +80,10 @@ function Nav(props) {
           </div>
         </div>
       </div>
+      <ModalLogin
+        setLoginModal={setLoginModal}
+        loginModal={loginModal}
+      />
     </div>
   );
 }

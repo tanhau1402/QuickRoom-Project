@@ -4,6 +4,7 @@ export const  ContextAmenities = createContext();
 
 export const AmenitiesContext = ({ children}) => {
     const [amenities, setAmenities] = useState([]);
+    
     useEffect(() => {
         const fetchData = async () => {
             const amenitiesData = await fetchDocuments('amenities');

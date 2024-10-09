@@ -33,8 +33,8 @@ export const  menu = [
             },
             {
                 id : 3,
-                title : "Room Images",
-                path : "roomsimages"
+                title : "Location",
+                path : "/location"
             }
         ]
     },

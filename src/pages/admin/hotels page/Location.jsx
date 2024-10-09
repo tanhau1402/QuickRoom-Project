@@ -1,9 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
+
 import {
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
   TablePagination,
   Modal,
   Box,
@@ -23,21 +20,16 @@ import {
   fetchDocuments,
   deleteDocument,
   updateDocument,
-} from "../../services/FirebaseService";
+} from "../../../services/FirebaseService";
 
-import ModalDelete from "../admin/hotels page/ModalDelete";
+import ModalDelete from "./ModalDelete";
 
-import { ContextLocation } from "../../context/LocationContext";
-
-function Hotels(props) {
-  const [listLocation, setListLocation] = useState([]);
-  const locations = useContext(ContextLocation);
-
+function Location(props) {
   const [open, setOpen] = useState(false);
   const [errors, setErrors] = useState({ name: "", des: "" });
 
-  const [hotel, setHotel] = useState({});
-  const [listHotel, setListHotel] = useState([]);
+  const [location, setLocation] = useState({});
+  const [listLocation, setListLocation] = useState([]);
 
   const [page, setPage] = useState(0); // Trang hiện tại
   const [rowsPerPage, setRowsPerPage] = useState(5);
@@ -55,73 +47,70 @@ function Hotels(props) {
 
   useEffect(() => {
     const fetchData = async () => {
-      const listHotelData = await fetchDocuments("listHotels");
-      setListHotel(listHotelData);
+      const listLocationData = await fetchDocuments("listLocations");
+      setListLocation(listLocationData);
     };
     fetchData();
   }, [update]);
+  const clearLocation = () => {
+    handleOpen();
+    setLocation({});
+  };
+  const validate = () => {
+    const newErrors = { name: "", icon: "" };
 
+    newErrors.name = location.name ? "" : "Name is required";
+
+    newErrors.des = location.des ? "" : "Des is required";
+
+    setErrors(newErrors);
+    return !newErrors.name && !newErrors.des;
+  };
   const handleSubmit = async () => {
     if (validate()) {
-      if (hotel.id) {
-        await updateDocument("listHotels", hotel.id, hotel);
+      if (location.id) {
+        await updateDocument("listLocations", location.id, location);
       } else {
-        await addDocument("listHotels", hotel);
+        await addDocument("listLocations", location);
       }
       setUpdate(!update);
       handleClose();
     }
   };
-  const validate = () => {
-    const newErrors = { name: "", address: "", city: "", description: "" };
-
-    newErrors.name = hotel.name ? "" : "Name is required";
-    newErrors.address = hotel.address ? "" : "Address is required";
-    newErrors.city = hotel.city ? "" : "City is required";
-    newErrors.description = hotel.description ? "" : "Name is required";
-
-    setErrors(newErrors);
-    return !newErrors.name && !newErrors.des;
-  };
-  const filteredHotels = listHotel.filter(
-    (hotel) =>
-      hotel.name.toLowerCase().includes(searchInput.toLowerCase()) ||
-      hotel.city.name.toLowerCase().includes(searchInput.toLowerCase())
-  );
-  const clearHotel = () => {
-    handleOpen();
-    setHotel({});
-  };
   const handleDelete = async () => {
     if (deleteId) {
-      await deleteDocument("listHotels", deleteId);
+      await deleteDocument("listLocations", deleteId);
       setUpdate(!update);
       setDeleteModal(false);
     }
   };
-const getNameLocal = (id) => {
-  const local = locations.find(a => a.id == id);
-  return local ? local.name : "";
-}
+  const filteredLocations = listLocation.filter(
+    (location) =>
+      location.name.toLowerCase().includes(searchInput.toLowerCase()) ||
+      location.des.toLowerCase().includes(searchInput.toLowerCase())
+  );
+
   return (
     <div>
       <header className="grid grid-cols-12 gap-4 p-4">
-        <div className="col-span-3 flex items-center text-2xl">List Hotels</div>
+        <div className="col-span-3 flex items-center text-2xl">
+          List Location
+        </div>
         <div className="col-span-6 flex">
           <input
             className="flex-1 p-2 border border-gray-300 rounded-l-md"
             type="text"
             value={searchInput}
             onChange={(e) => setSearchInput(e.target.value)}
-            placeholder="Search hotel..."
+            placeholder="Search location..."
           />
           <button className="p-2 bg-emerald-600 text-white rounded-r-md">
             <i className="fa-solid fa-magnifying-glass"></i>
           </button>
         </div>
         <div className="col-span-3 flex justify-end">
-          <Button variant="contained" color="success" onClick={clearHotel}>
-            Add Hotel
+          <Button variant="contained" color="success" onClick={clearLocation}>
+            Add Location
           </Button>
         </div>
       </header>
@@ -130,33 +119,28 @@ const getNameLocal = (id) => {
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell align="center">Hotel ID</TableCell>
+              <TableCell align="center">Location ID</TableCell>
               <TableCell align="center">Name</TableCell>
-              <TableCell align="center">Address</TableCell>
-              <TableCell align="center">City</TableCell>
               <TableCell align="center">Description</TableCell>
               <TableCell align="center">Action</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {filteredHotels
+            {filteredLocations
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              .map((hotel, index) => (
+              .map((location, index) => (
                 <TableRow key={index}>
                   <TableCell align="center">
                     {page * rowsPerPage + index + 1}
                   </TableCell>
-                  <TableCell align="center">{hotel.name}</TableCell>
-                  <TableCell align="center">{hotel.address}</TableCell>
-                  <TableCell align="center">{getNameLocal(hotel.city)}</TableCell>
-                  <TableCell align="center">{hotel.description}</TableCell>
-
+                  <TableCell align="center">{location.name}</TableCell>
+                  <TableCell align="center">{location.des}</TableCell>
                   <TableCell align="center">
                     <Button
                       onClick={() => {
                         setOpen(true);
-                        setHotel(hotel);
-                        setEditId(hotel.deleteId);
+                        setLocation(location);
+                        setEditId(location.deleteId);
                       }}
                       sx={{ padding: "10px", mr: 1 }}
                       variant="contained"
@@ -167,7 +151,7 @@ const getNameLocal = (id) => {
                     <Button
                       onClick={() => {
                         setDeleteModal(true);
-                        setDeleteId(hotel.id);
+                        setDeleteId(location.id);
                       }}
                       sx={{ padding: "10px" }}
                       variant="contained"
@@ -183,7 +167,7 @@ const getNameLocal = (id) => {
         <TablePagination
           rowsPerPageOptions={[5, 10, 25]}
           component="div"
-          count={listHotel.length}
+          count={listLocation.length}
           rowsPerPage={rowsPerPage}
           page={page}
           onPageChange={(event, newPage) => setPage(newPage)}
@@ -195,59 +179,32 @@ const getNameLocal = (id) => {
       </TableContainer>
       <Modal open={open} onClose={handleClose}>
         <Box className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white p-6 rounded-lg shadow-lg w-96">
-          <h2 className="mb-4">{hotel.id ? "EDIT Hotel" : "ADD NEW HOTEL"}</h2>
+          <h2 className="mb-4">
+            {location.id ? "EDIT LOCATION" : "ADD NEW LOCATION"}
+          </h2>
           <TextField
             fullWidth
             label="Name"
             variant="outlined"
-            value={hotel.name}
-            onChange={(e) => setHotel({ ...hotel, name: e.target.value })}
+            value={location.name}
+            onChange={(e) => setLocation({ ...location, name: e.target.value })}
             style={{ marginBottom: "10px" }}
             error={!!errors.name}
             helperText={errors.name}
           />
           <TextField
             fullWidth
-            label="Address"
+            label="Description"
             variant="outlined"
-            value={hotel.address}
-            onChange={(e) => setHotel({ ...hotel, address: e.target.value })}
+            value={location.des}
+            onChange={(e) => setLocation({ ...location, des: e.target.value })}
             style={{ marginBottom: "10px" }}
             error={!!errors.des}
             helperText={errors.des}
           />
-          <FormControl fullWidth>
-            <InputLabel id="room-available-label">City</InputLabel>
-            <Select
-              labelId="room-city-label"
-              id="room-city-select"
-              style={{ marginBottom: "10px" }}
-              label="City"
-              value={hotel.city}
-              onChange={(e) => setHotel({ ...hotel, city: e.target.value })}
-            >
-              {locations.map((city) => (
-                <MenuItem key={city.id} value={city.id}>
-                  {city.name}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-          <TextField
-            fullWidth
-            label="Description"
-            variant="outlined"
-            value={hotel.description}
-            onChange={(e) =>
-              setHotel({ ...hotel, description: e.target.value })
-            }
-            style={{ marginBottom: "10px" }}
-            error={!!errors.description}
-            helperText={errors.description}
-          />
           <Box className="flex justify-end mt-4">
             <Button variant="contained" color="primary" onClick={handleSubmit}>
-              {hotel.id ? "UPDATE" : "Save"}
+              {location.id ? "UPDATE" : "Save"}
             </Button>
             <Button
               variant="outlined"
@@ -269,4 +226,4 @@ const getNameLocal = (id) => {
   );
 }
 
-export default Hotels;
+export default Location;

@@ -45,8 +45,8 @@ function AdminDashboard(props) {
             <div>
               <div onClick={() => handelShow(element)} className="flex items-center p-3  hover:text-blue-700 hover:bg-white">
                 <i class={element.icon}></i>
-                <p className={`${hidden2 ? "hidden" : ""}`}>{element.title}</p>
-                <i className={`p-3 text-xs ${hidden2 ? "hidden" : ""}`}  ></i>
+                <p className={`${hidden2 ? "hidden" : ""}`}>{element.title}</p>             
+                <i class={`fa-solid fa-angle-down ms-auto ${hidden2 ? "hidden" : ""}`}></i>
               </div>
               <div className={show == element.id ? "" : "hidden"}>
                 {element.items.map((item) => (
@@ -90,7 +90,7 @@ function AdminDashboard(props) {
                 alt=""
               />
               <div
-                className={`text-center absolute right-0 shadow-lg ${
+                className={`text-center absolute z-10 bg-gray-100 right-0 shadow-lg ${
                   hidden ? "hidden" : ""
                 }`}
               >
