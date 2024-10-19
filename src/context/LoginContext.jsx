@@ -1,7 +1,7 @@
 import React, { createContext, useState, useEffect } from "react";
 import { fetchDocuments } from "../services/FirebaseService";
-
 export const ContextLogin = createContext();
+
 
 export const LoginContext = ({ children }) => {
     const [login, setLogin] = useState([]);
@@ -12,7 +12,6 @@ export const LoginContext = ({ children }) => {
       };
       fetchData();
     }, []);
-  
     return (
       <ContextLogin.Provider value={login}>
         {children}

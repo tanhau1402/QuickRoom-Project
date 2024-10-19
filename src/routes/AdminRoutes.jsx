@@ -4,14 +4,13 @@ import DashBoard from "../pages/admin/DashBoard"
 import Info from '../pages/admin/Info';
 import Users from '../pages/admin/user page/Users';
 import Reviews from '../pages/admin/user page/Reviews';
-import RoomsImages from '../pages/admin/hotels page/RoomsImages';
 import Rooms from '../pages/admin/hotels page/Rooms';
 import Amenities from '../pages/admin/hotels page/Amenities';
 import Bookings from '../pages/admin/booking page/Bookings';
 import Payments from '../pages/admin/booking page/Payments';
 import Location from '../pages/admin/hotels page/Location';
 import { Route, Routes } from 'react-router-dom';
-
+import TypeBusiness from '../pages/admin/booking page/TypeBusiness';
 function AdminRoutes(props) {
      
    const routes = [
@@ -65,6 +64,11 @@ function AdminRoutes(props) {
         path : "/payments",
         page : Payments
       },
+      {
+        id: 11,
+        path : "/typebusiness",
+        page : TypeBusiness
+      }
 
 
    ]

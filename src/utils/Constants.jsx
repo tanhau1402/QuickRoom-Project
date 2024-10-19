@@ -13,6 +13,11 @@ export const  menu = [
                 id : 2,
                 title : "Payments",
                 path : "/payments"
+            },
+            {
+                id: 3,
+                title : "Type Business",
+                path : "/typebusiness"
             }
         ]
     },
@@ -59,3 +64,9 @@ export const  menu = [
 
 export const listTypeRoom = ["Standard","Single bed room","Twin bed room"];
 export const listAvailable = ["Available","Not Available","Repairing"];
+
+export const ROLES = {
+    ADMIN: 'admin',        // Quản trị viên cấp cao
+    MODERATOR: 'moderator', // Quản trị viên cấp trung (người kiểm duyệt)
+    USER: 'user',          // Người dùng thông thường
+};

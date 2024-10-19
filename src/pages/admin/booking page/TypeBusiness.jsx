@@ -13,11 +13,6 @@ import {
     TableHead,
     TableRow,
     Paper,
-    InputLabel,
-    Select,
-    MenuItem,
-    FormControl,
-
 } from "@mui/material";
 
 import {
@@ -28,14 +23,13 @@ import {
 } from "../../../services/FirebaseService";
 
 import ModalDelete from "../hotels page/ModalDelete";
-import { ROLES } from "../../../utils/Constants";
 
-function Users(props) {
+function TypeBusiness(props) {
     const [open, setOpen] = useState(false);
     const [errors, setErrors] = useState({ name: "", des: "" });
 
-    const [user, setUser] = useState({});
-    const [listUser, setListUser] = useState([]);
+    const [type, setType] = useState({});
+    const [listType, setListType] = useState([]);
 
     const [page, setPage] = useState(0); // Trang hiện tại
     const [rowsPerPage, setRowsPerPage] = useState(5);
@@ -51,146 +45,109 @@ function Users(props) {
 
     const [searchInput, setSearchInput] = useState("");
 
-    const [imgUpload, setImgUpload] = useState([]);
-    const [preViewImg, setPreviewImg] = useState([]);
-
-
-
     useEffect(() => {
         const fetchData = async () => {
-            const listUserData = await fetchDocuments("Customers");
-            setListUser(listUserData);
+            const listTypeData = await fetchDocuments("listTypeBusiness");
+            setListType(listTypeData);
         };
         fetchData();
     }, [update]);
 
-    const clearUser = () => {
+    const clearType = () => {
         handleOpen();
-        setUser({});
-        setImgUpload({});
-        setPreviewImg({});
-    };
-
-    const validate = () => {
-        const newErrors = { id: "", name: "" };
-
-        newErrors.id = user.id ? "" : "ID is required";
-
-        newErrors.nameCustomer = user.nameCustomer ? "" : "Name is required";
-
-        setErrors(newErrors);
-        return !newErrors.id && !newErrors.nameCustomer;
+        setType({});
     };
 
     const handleSubmit = async () => {
         if (validate()) {
-            if (user.id) {
-                await updateDocument("Customers", user.id, {
-                    ...user,
-                    imgUrl: imgUpload
-                });
+            if (type.id) {
+                await updateDocument("listTypeBusiness", type.id, type);
             } else {
-                await addDocument("Customers", user, imgUpload);
+                await addDocument("listTypeBusiness", type);
             }
             setUpdate(!update);
             handleClose();
         }
     };
-    console.log(user.id)
-
-    const handleImageUpload = (e) => {
-        const file = e.target.files[0]; // Lấy file đầu tiên
-
-        if (file) {
-            const reader = new FileReader();
-
-            reader.onload = () => {
-                // Khi file đã được đọc, lưu URL vào state
-                setPreviewImg(reader.result); // Cập nhật danh sách xem trước hình ảnh
-
-                setImgUpload(reader.result); // Lưu URL của hình ảnh để xem trước
-                setUser((user) => ({ ...user, imgUrl: reader.result })); // Cập nhật user với URL
-            };
-
-            reader.readAsDataURL(file); // Đọc file dưới dạng data URL
-        }
-    };
 
     const handleDelete = async () => {
         if (deleteId) {
-            await deleteDocument("Customers", deleteId);
+            await deleteDocument("listTypeBusiness", deleteId);
             setUpdate(!update);
             setDeleteModal(false);
         }
     };
 
-    const filteredUser = listUser.filter(
-        (user) =>
-            user.nameCustomer.toLowerCase().includes(searchInput.toLowerCase()) ||
-            user.id.toLowerCase().includes(searchInput.toLowerCase()) ||
-            user.role.toLowerCase().includes(searchInput.toLowerCase())
+    const filteredType = listType.filter(
+        (type) =>
+            type.id.toLowerCase().includes(searchInput.toLowerCase()) ||
+            type.des.toLowerCase().includes(searchInput.toLowerCase())
     );
 
+    const validate = () => {
+        const newErrors = { icon: "", des: "" };
+
+        newErrors.icon = type.icon ? "" : "Name is required";
+
+        newErrors.des = type.des ? "" : "Des is required";
+
+        setErrors(newErrors);
+        return !newErrors.icon && !newErrors.des;
+    };
     return (
         <div>
             <header className="grid grid-cols-12 gap-4 p-4">
-                <div className="col-span-3 flex items-center text-2xl">List User</div>
+                <div className="col-span-3 flex items-center text-2xl">
+                    List Type Business
+                </div>
                 <div className="col-span-6 flex">
                     <input
                         className="flex-1 p-2 border border-gray-300 rounded-l-md"
                         type="text"
                         value={searchInput}
                         onChange={(e) => setSearchInput(e.target.value)}
-                        placeholder="Search location..."
+                        placeholder="Search type..."
                     />
                     <button className="p-2 bg-emerald-600 text-white rounded-r-md">
                         <i className="fa-solid fa-magnifying-glass"></i>
                     </button>
                 </div>
                 <div className="col-span-3 flex justify-end">
-                    <Button variant="contained" color="success" onClick={clearUser}>
-                        Add User
+                    <Button variant="contained" color="success" onClick={clearType}>
+                        Add Type Business
                     </Button>
                 </div>
             </header>
             {/* Table */}
-            <TableContainer className="text-center" sx={{ padding: 2 }}>
+            <TableContainer sx={{ padding: 2 }}>
                 <Table>
                     <TableHead>
                         <TableRow>
-                            <TableCell align="center">User ID</TableCell>
-                            <TableCell align="center">Email</TableCell>
-                            <TableCell align="center">Name</TableCell>
-                            <TableCell align="center">Role</TableCell>
-                            <TableCell align="center">Image</TableCell>
+                            <TableCell align="center">Type Business ID</TableCell>
+                            <TableCell align="center">Icon</TableCell>
+                            <TableCell align="center">Description</TableCell>
                             <TableCell align="center">Action</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {filteredUser
+                        {filteredType
                             .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                            .map((user, index) => (
+                            .map((type, index) => (
                                 <TableRow key={index}>
                                     <TableCell align="center">
                                         {page * rowsPerPage + index + 1}
                                     </TableCell>
-                                    <TableCell align="center">{user.id}</TableCell>
-                                    <TableCell align="center">{user.nameCustomer}</TableCell>
-                                    <TableCell align="center">{user.role}</TableCell>
                                     <TableCell align="center">
-                                        <img
-                                            src={user.imgUrl}
-                                            alt="userImg"
-                                            style={{ width: "50px", height: "50px" }}
-                                        />
-                                    </TableCell>
+                                    {" "}
+                                        <i className={type.icon}></i></TableCell>
 
+                                    <TableCell align="center">{type.des}</TableCell>
                                     <TableCell align="center">
                                         <Button
                                             onClick={() => {
                                                 setOpen(true);
-                                                setUser(user);
-                                                setEditId(user.deleteId);
+                                                setType(type);
+                                                setEditId(type.deleteId);
                                             }}
                                             sx={{ padding: "10px", mr: 1 }}
                                             variant="contained"
@@ -201,7 +158,7 @@ function Users(props) {
                                         <Button
                                             onClick={() => {
                                                 setDeleteModal(true);
-                                                setDeleteId(user.id);
+                                                setDeleteId(type.id);
                                             }}
                                             sx={{ padding: "10px" }}
                                             variant="contained"
@@ -217,7 +174,7 @@ function Users(props) {
                 <TablePagination
                     rowsPerPageOptions={[5, 10, 25]}
                     component="div"
-                    count={listUser.length}
+                    count={listType.length}
                     rowsPerPage={rowsPerPage}
                     page={page}
                     onPageChange={(event, newPage) => setPage(newPage)}
@@ -229,67 +186,32 @@ function Users(props) {
             </TableContainer>
             <Modal open={open} onClose={handleClose}>
                 <Box className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white p-6 rounded-lg shadow-lg w-96">
-                    <h2 className="mb-4">{user.id ? "EDIT USER" : "ADD NEW USER"}</h2>
+                    <h2 className="mb-4">
+                        {type.id ? "EDIT TYPE" : "ADD NEW TYPE"}
+                    </h2>
                     <TextField
                         fullWidth
-                        label="Email"
+                        label="Icon"
                         variant="outlined"
-                        value={user.id}
-                        onChange={(e) => setUser({ ...user, id: e.target.value })}
+                        value={type.icon}
+                        onChange={(e) => setType({ ...type, icon: e.target.value })}
                         style={{ marginBottom: "10px" }}
-                        error={!!errors.id}
-                        helperText={errors.id}
+                        error={!!errors.icon}
+                        helperText={errors.icon}
                     />
                     <TextField
                         fullWidth
-                        label="Name"
+                        label="Description"
                         variant="outlined"
-                        value={user.nameCustomer}
-                        onChange={(e) => setUser({ ...user, nameCustomer: e.target.value })}
+                        value={type.des}
+                        onChange={(e) => setType({ ...type, des: e.target.value })}
                         style={{ marginBottom: "10px" }}
-                        error={!!errors.nameCustomer}
-                        helperText={errors.nameCustomer}
+                        error={!!errors.des}
+                        helperText={errors.des}
                     />
-
-                    <FormControl>
-                        <div>
-                            <label htmlFor="role-select">Chọn vai trò:</label>
-                            <select id="role-select" value={user.role} onChange={(e) => setUser({ ...user, role: e.target.value })}>
-                                {Object.values(ROLES).map((role) => (
-                                    <option key={role} value={role}>
-                                        {role}
-                                    </option>
-                                ))}
-                            </select>
-
-                        </div>
-                    </FormControl>
-
-                    <FormControl>
-                        <input
-                            accept="image/*"
-                            type="file"
-                            onChange={(e) => handleImageUpload(e)}
-                        />
-
-                        <div className=" mt-3" >
-                            <img
-                                src={user.imgUrl}
-                                alt={`Uploaded `}
-                                style={{
-                                    maxWidth: "100%",
-                                    height: "auto",
-                                    marginBottom: "10px",
-                                }}
-                            />
-
-                        </div>
-
-                    </FormControl>
-
                     <Box className="flex justify-end mt-4">
                         <Button variant="contained" color="primary" onClick={handleSubmit}>
-                            {user.id ? "UPDATE" : "Save"}
+                            {type.id ? "UPDATE" : "Save"}
                         </Button>
                         <Button
                             variant="outlined"
@@ -311,4 +233,4 @@ function Users(props) {
     );
 }
 
-export default Users;
+export default TypeBusiness;

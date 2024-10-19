@@ -88,7 +88,7 @@ function Rooms(props) {
         await updateDocument("listRooms", room.id, {
           ...room,
           imgUrls: preViewImg,
-        });
+        }); 
       } else {
         // Nếu room chưa có id, thêm room mới với hình ảnh mới
         await addDocument("listRooms", room, imgUpload);
@@ -221,17 +221,17 @@ function Rooms(props) {
                   <TableCell align="center">
                     {room.listAmenities && room.listAmenities.length > 0
                       ? room.listAmenities.map((amenityId, i) => {
-                          const amenity = amenities.find(
-                            (a) => a.id === amenityId
-                          );
-                          return amenity ? (
-                            <i
-                              key={i}
-                              className={amenity.icon}
-                              style={{ marginRight: "10px" }}
-                            ></i>
-                          ) : null;
-                        })
+                        const amenity = amenities.find(
+                          (a) => a.id === amenityId
+                        );
+                        return amenity ? (
+                          <i
+                            key={i}
+                            className={amenity.icon}
+                            style={{ marginRight: "10px" }}
+                          ></i>
+                        ) : null;
+                      })
                       : "No amenities"}
                   </TableCell>
                   <TableCell align="center">{room.animals}</TableCell>
@@ -286,157 +286,157 @@ function Rooms(props) {
         />
       </TableContainer>
       <Modal open={open} onClose={handleClose}>
-        <Box className="absolute text-center  top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white p-6 rounded-lg shadow-lg ">  
-        <Box className=" grid grid-cols-2  md:grid-cols-2 lg:grid-cols-2 gap-5 ">
-          <div className="box-1">
-            <h2 className="mb-4">{room.id ? "EDIT ROOM" : "ADD NEW ROOM"}</h2>
-            <TextField
-              fullWidth
-              label="Persons"
-              variant="outlined"
-              value={room.persons}
-              onChange={(e) => setRoom({ ...room, persons: e.target.value })}
-              style={{ marginBottom: "10px", marginTop: "10px" }}
-            />
-            <TextField
-              fullWidth
-              label="Price per night"
-              variant="outlined"
-              value={room.price_per_night}
-              onChange={(e) =>
-                setRoom({ ...room, price_per_night: e.target.value })
-              }
-              style={{ marginBottom: "10px", marginTop: "10px" }}
-            />
-            <FormControl fullWidth>
-              <InputLabel id="room-available-label">Room Available</InputLabel>
-              <Select
-                labelId="room-available-label"
-                id="room-available-select"
-                style={{ marginBottom: "10px" }}
-                label="Room Available"
-                value={room.available}
+        <Box className="absolute text-center  top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white p-6 rounded-lg shadow-lg ">
+          <Box className=" grid grid-cols-2  md:grid-cols-2 lg:grid-cols-2 gap-5 ">
+            <div className="box-1">
+              <h2 className="mb-4">{room.id ? "EDIT ROOM" : "ADD NEW ROOM"}</h2>
+              <TextField
+                fullWidth
+                label="Persons"
+                variant="outlined"
+                value={room.persons}
+                onChange={(e) => setRoom({ ...room, persons: e.target.value })}
+                style={{ marginBottom: "10px", marginTop: "10px" }}
+              />
+              <TextField
+                fullWidth
+                label="Price per night"
+                variant="outlined"
+                value={room.price_per_night}
                 onChange={(e) =>
-                  setRoom({ ...room, available: e.target.value })
+                  setRoom({ ...room, price_per_night: e.target.value })
                 }
+                style={{ marginBottom: "10px", marginTop: "10px" }}
+              />
+              <FormControl fullWidth>
+                <InputLabel id="room-available-label">Room Available</InputLabel>
+                <Select
+                  labelId="room-available-label"
+                  id="room-available-select"
+                  style={{ marginBottom: "10px" }}
+                  label="Room Available"
+                  value={room.available}
+                  onChange={(e) =>
+                    setRoom({ ...room, available: e.target.value })
+                  }
+                >
+                  {listAvailable.map((type, index) => (
+                    <MenuItem key={index} value={type}>
+                      {type}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+              <FormControl>
+                <FormLabel>Animals Service</FormLabel>
+                <RadioGroup
+                  aria-label="animal"
+                  name="animal"
+                  value={room.animals}
+                  onChange={(e) => setRoom({ ...room, animals: e.target.value })}
+                >
+                  <Box display="flex" alignItems="center">
+                    <FormControlLabel
+                      value="yes"
+                      control={<Radio />}
+                      label="Yes"
+                    />
+                    <FormControlLabel value="no" control={<Radio />} label="No" />
+                  </Box>
+                </RadioGroup>
+              </FormControl>
+              <FormControl
+                fullWidth
+                style={{ textAlign: "center", marginBottom: "10px" }}
               >
-                {listAvailable.map((type, index) => (
-                  <MenuItem key={index} value={type}>
-                    {type}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-            <FormControl>
-              <FormLabel>Animals Service</FormLabel>
-              <RadioGroup
-                aria-label="animal"
-                name="animal"
-                value={room.animals}
-                onChange={(e) => setRoom({ ...room, animals: e.target.value })}
-              >
-                <Box display="flex" alignItems="center">
-                  <FormControlLabel
-                    value="yes"
-                    control={<Radio />}
-                    label="Yes"
-                  />
-                  <FormControlLabel value="no" control={<Radio />} label="No" />
-                </Box>
-              </RadioGroup>
-            </FormControl>
-            <FormControl
-              fullWidth
-              style={{ textAlign: "center", marginBottom: "10px" }}
-            >
-              <InputLabel
-                id="room-type-amenity"
-                style={{
-                  position: "relative",
-                  top: "-20px",
+                <InputLabel
+                  id="room-type-amenity"
+                  style={{
+                    position: "relative",
+                    top: "-20px",
 
+                    color: "#333",
+                  }}
+                >
+                  Room Amenity
+                </InputLabel>
+
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    gap: "10px",
+                    flexWrap: "wrap",
+                  }}
+                >
+                  {amenities.map((amenity) => (
+                    <Button
+                      key={amenity.id}
+                      value={room.amenity}
+                      onClick={() => handleAmenities(amenity.id)}
+                      variant={
+                        isAmenitySelected(amenity.id) ? "contained" : "outlined"
+                      }
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        padding: "10px",
+                      }}
+                    >
+                      <i className={amenity.icon}></i>
+                    </Button>
+                  ))}
+                </div>
+              </FormControl>
+            </div>
+            <div className="box-2">
+              {/* Image URL Input */}
+              <InputLabel
+                style={{
                   color: "#333",
+                  textAlign: "center",
                 }}
               >
-                Room Amenity
+                Images Amenity
               </InputLabel>
 
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  gap: "10px",
-                  flexWrap: "wrap",
-                }}
-              >
-                {amenities.map((amenity) => (
-                  <Button
-                    key={amenity.id}
-                    value={room.amenity}
-                    onClick={() => handleAmenities(amenity.id)}
-                    variant={
-                      isAmenitySelected(amenity.id) ? "contained" : "outlined"
-                    }
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      padding: "10px",
-                    }}
-                  >
-                    <i className={amenity.icon}></i>
-                  </Button>
-                ))}
+              {/* File Upload Input */}
+              <input
+                type="file"
+                accept="image/*"
+                onChange={(e) => handleImageUpload(e)}
+                style={{ marginBottom: "10px", marginTop: "10px" }}
+              />
+
+              {/* Image Preview */}
+              <div className="grid grid-cols-3 md:grid-cols-3 lg:grid-cols-3 gap-5">
+                {preViewImg.length > 0 ? (
+                  preViewImg.map((image, index) => (
+                    <div className="relative mt-3" key={index}>
+                      <img
+                        src={image}
+                        alt={`Uploaded ${index}`}
+                        style={{
+                          maxWidth: "100%",
+                          height: "auto",
+                          marginBottom: "10px",
+                        }}
+                      />
+                      <i
+                        onClick={() => deleteImg(index)}
+                        className="fa-solid fa-trash-can top-[-10px] left-[-10px] absolute hover:text-red-700 text-black text-2xl"
+                      ></i>
+                    </div>
+                  ))
+                ) : (
+                  <p>No images available</p>
+                )}
               </div>
-            </FormControl>
-          </div>
-          <div className="box-2">
-            {/* Image URL Input */}
-            <InputLabel
-              style={{
-                color: "#333",
-                textAlign: "center",
-              }}
-            >
-              Images Amenity
-            </InputLabel>
-
-            {/* File Upload Input */}
-            <input
-              type="file"
-              accept="image/*"
-              onChange={(e) => handleImageUpload(e)}
-              style={{ marginBottom: "10px", marginTop: "10px" }}
-            />
-
-            {/* Image Preview */}
-            <div className="grid grid-cols-3 md:grid-cols-3 lg:grid-cols-3 gap-5">
-              {preViewImg.length > 0 ? (
-                preViewImg.map((image, index) => (
-                  <div className="relative mt-3" key={index}>
-                    <img
-                      src={image}
-                      alt={`Uploaded ${index}`}
-                      style={{
-                        maxWidth: "100%",
-                        height: "auto",
-                        marginBottom: "10px",
-                      }}
-                    />
-                    <i
-                      onClick={() => deleteImg(index)}
-                      className="fa-solid fa-trash-can top-[-10px] left-[-10px] absolute hover:text-red-700 text-black text-2xl"
-                    ></i>
-                  </div>
-                ))
-              ) : (
-                <p>No images available</p>
-              )}
             </div>
-          </div>
-          
-        </Box>
-        <Box className=" flex justify-end mt-4">
+
+          </Box>
+          <Box className=" flex justify-end mt-4">
             <Button variant="contained" color="primary" onClick={handleSubmit}>
               {room.id ? "UPDATE" : "Save"}
             </Button>
@@ -448,7 +448,7 @@ function Rooms(props) {
             >
               Cancel
             </Button>
-        </Box>
+          </Box>
         </Box>
       </Modal>
       <ModalDelete

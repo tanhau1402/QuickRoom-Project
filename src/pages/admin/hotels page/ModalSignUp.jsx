@@ -1,9 +1,9 @@
 import React from "react";
 import { signInWithPopup, signInWithPhoneNumber, RecaptchaVerifier } from "firebase/auth";
-import { addDocument } from "../services/FirebaseService";
-import { googleProvider, auth } from "../services/firebase";
-function LoginForm(props) {
-
+import { addDocument } from "../../../services/FirebaseService";
+import { googleProvider,auth } from "../../../services/firebase";
+import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Button } from '@mui/material';
+function ModalSignUp({setSignUpModal,signUpModal}) {
   const signInWithGoogle = async () => {
     try {
         const result = await signInWithPopup(auth, googleProvider);
@@ -24,10 +24,33 @@ function LoginForm(props) {
 };
   return (
     <div>
-      <body class="flex items-center justify-center min-h-screen bg-gray-800">
-        <div class="w-full max-w-md bg-white rounded-lg shadow-lg p-8">
+      <Dialog
+        open={signUpModal}
+        onClose={setSignUpModal}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+         {/* Nút đóng modal */}
+         <button
+          style={{
+            position: 'absolute',
+            right: '7px',
+            top: '0px',
+            background: 'none',
+            border: 'none',
+            cursor: 'pointer',
+            fontSize: '30px',
+            color: 'red'
+          }}
+          onClick={() => setSignUpModal(false)} // Gọi hàm đóng modal
+        >
+            <i class="fa-solid fa-circle-xmark"></i>
+        </button>
+       <div>
+      <body class="flex items-center justify-center ">
+        <div class="w-full max-w-md rounded-lg shadow-lg p-8">
           <h2 class="text-3xl font-bold text-center mb-6">
-            Log in to QuickRoom
+            Sign Up to QuickRoom
           </h2>
           <form action="#" method="POST" class="space-y-4">
             {/* <!-- Email Input --> */}
@@ -65,20 +88,31 @@ function LoginForm(props) {
                 required
               />
             </div>
+            {/* <!-- Password Input Second Time --> */}
+            <div>
+              <label
+                for="password"
+                class="block text-sm font-medium text-gray-700"
+              >
+                Type Again Password
+              </label>
+              <input
+                type="password"
+                id="password"
+                name="password"
+                class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                placeholder="••••••••"
+                required
+              />
+            </div>
 
             {/* <!-- Remember me checkbox --> */}
             <div class="flex items-center justify-between">
               <label for="remember" class="flex items-center">
-                <input
-                  type="checkbox"
-                  id="remember"
-                  name="remember"
-                  class="h-4 w-4 text-indigo-600 border-gray-300 rounded"
-                />
-                <span class="ml-2 text-sm text-gray-600">Remember me</span>
+                <span class="ml-2 text-sm text-gray-600">Bạn đã có tài khoản</span>
               </label>
               <a href="#" class="text-sm text-indigo-600 hover:text-indigo-500">
-                Forgot your password?
+                Đăng nhập
               </a>
             </div>
 
@@ -107,7 +141,7 @@ function LoginForm(props) {
           <div class="flex space-x-4">
             <button onClick={signInWithGoogle} class="flex items-center justify-center w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50">
               <i class="fa-brands fa-google h-5 w-5 mr-2  p-1"></i>
-              Googlevfsbgdfbdfb
+              Google
             </button>
             <button class="flex items-center justify-center w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50">
               <i class="fa-brands fa-facebook h-5 w-5 mr-2  p-1 "></i>
@@ -117,7 +151,11 @@ function LoginForm(props) {
         </div>
       </body>
     </div>
+      </Dialog>
+    </div>
   );
 }
 
-export default LoginForm;
+export default ModalSignUp;
+
+

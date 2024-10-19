@@ -5,13 +5,13 @@ import { Link } from "react-router-dom";
 function AdminDashboard(props) {
   const [hidden, setHidden] = useState(true);
   const [hidden2, setHidden2] = useState(true);
-  const [show,setShow] = useState(null);
-  const  handelShow = (element) => {
-       if(show == element.id) {
-        setShow(null);
-       }else {
-        setShow(element.id);
-       }
+  const [show, setShow] = useState(null);
+  const handelShow = (element) => {
+    if (show == element.id) {
+      setShow(null);
+    } else {
+      setShow(element.id);
+    }
   }
   return (
     <div className="admin md:flex ">
@@ -45,7 +45,7 @@ function AdminDashboard(props) {
             <div>
               <div onClick={() => handelShow(element)} className="flex items-center p-3  hover:text-blue-700 hover:bg-white">
                 <i class={element.icon}></i>
-                <p className={`${hidden2 ? "hidden" : ""}`}>{element.title}</p>             
+                <p className={`${hidden2 ? "hidden" : ""}`}>{element.title}</p>
                 <i class={`fa-solid fa-angle-down ms-auto ${hidden2 ? "hidden" : ""}`}></i>
               </div>
               <div className={show == element.id ? "" : "hidden"}>
@@ -90,9 +90,8 @@ function AdminDashboard(props) {
                 alt=""
               />
               <div
-                className={`text-center absolute z-10 bg-gray-100 right-0 shadow-lg ${
-                  hidden ? "hidden" : ""
-                }`}
+                className={`text-center absolute z-10 bg-gray-100 right-0 shadow-lg ${hidden ? "hidden" : ""
+                  }`}
               >
                 <div>
                   <img
@@ -128,7 +127,7 @@ function AdminDashboard(props) {
           </div>
         </div>
         <div className="main-right">
-            <AdminRoutes/>
+          <AdminRoutes />
         </div>
       </div>
     </div>
