@@ -100,18 +100,16 @@ function Users(props) {
 
     const handleImageUpload = (e) => {
         const file = e.target.files[0]; // Lấy file đầu tiên
-
+    
         if (file) {
+            setImgUpload(file); // Lưu file để tải lên
             const reader = new FileReader();
-
+            
             reader.onload = () => {
-                // Khi file đã được đọc, lưu URL vào state
-                setPreviewImg(reader.result); // Cập nhật danh sách xem trước hình ảnh
-
-                setImgUpload(reader.result); // Lưu URL của hình ảnh để xem trước
-                setUser((user) => ({ ...user, imgUrl: reader.result })); // Cập nhật user với URL
+                setPreviewImg(file);
+                setImgUpload(reader.result); // Cập nhật danh sách xem trước hình ảnh
             };
-
+    
             reader.readAsDataURL(file); // Đọc file dưới dạng data URL
         }
     };
