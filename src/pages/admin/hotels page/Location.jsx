@@ -76,7 +76,7 @@ function Location(props) {
       setUpdate(!update);
       handleClose();
     }
-  };
+  }; 
   const handleDelete = async () => {
     if (deleteId) {
       await deleteDocument("listLocations", deleteId);

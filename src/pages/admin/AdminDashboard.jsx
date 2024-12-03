@@ -1,17 +1,24 @@
-import React, { useState } from "react";
+import React, { useState ,useContext} from "react";
 import { menu } from "../../utils/Constants";
 import AdminRoutes from "../../routes/AdminRoutes";
 import { Link } from "react-router-dom";
+import { CustomerLoginContext } from "../../context/CustomerLoginContext";
 function AdminDashboard(props) {
   const [hidden, setHidden] = useState(true);
   const [hidden2, setHidden2] = useState(true);
   const [show, setShow] = useState(null);
+  const { isLogin, setIsLogin } = useContext(CustomerLoginContext);
+
   const handelShow = (element) => {
     if (show == element.id) {
       setShow(null);
     } else {
       setShow(element.id);
     }
+  }
+  const handleLogout = () => {
+    setIsLogin(false);
+     localStorage.setItem("customerLogin", false);
   }
   return (
     <div className="admin md:flex ">
@@ -85,23 +92,22 @@ function AdminDashboard(props) {
             <div className="relative">
               <img
                 onClick={() => setHidden(!hidden)}
-                className="w-10 h-10 rounded-full"
-                src="https://media.istockphoto.com/id/1495088043/vector/user-profile-icon-avatar-or-person-icon-profile-picture-portrait-symbol-default-portrait.jpg?s=612x612&w=0&k=20&c=dhV2p1JwmloBTOaGAtaA3AW1KSnjsdMt7-U_3EZElZ0="
+                className="w-8 h-8   rounded-full mx-auto"
+                    src={isLogin ? isLogin.imgUrl : 'https://w7.pngwing.com/pngs/178/595/png-transparent-user-profile-computer-icons-login-user-avatars-thumbnail.png'}
                 alt=""
               />
               <div
-                className={`text-center absolute z-10 bg-gray-100 right-0 shadow-lg ${hidden ? "hidden" : ""
+                className={`text-center mt-2 p-3 rounded-lg absolute z-10 bg-gray-100 right-0 shadow-xl ${hidden ? "hidden" : ""
                   }`}
               >
                 <div>
-                  <img
-                    className="w-10 h-10 rounded-full m-auto"
-                    src="https://media.istockphoto.com/id/1495088043/vector/user-profile-icon-avatar-or-person-icon-profile-picture-portrait-symbol-default-portrait.jpg?s=612x612&w=0&k=20&c=dhV2p1JwmloBTOaGAtaA3AW1KSnjsdMt7-U_3EZElZ0="
-                    alt=""
+                <img
+                    className="w-8 h-8   rounded-full mx-auto"
+                    src={isLogin ? isLogin.imgUrl : 'https://w7.pngwing.com/pngs/178/595/png-transparent-user-profile-computer-icons-login-user-avatars-thumbnail.png'}                   
                   />
                 </div>
-                <h3 className="px-2">Allen Moreno</h3>
-                <p className="px-2">allenmoreno@gmail.com</p>
+                <h3 className="px-2">{isLogin.nameCustomer}</h3>
+                <p className="px-2">{isLogin.id}</p>
                 <div className="flex items-center p-2 hover:bg-gray-500 hover:text-white">
                   <i class="fa-solid fa-user mr-2"></i>
                   <p>My profile</p>
@@ -118,9 +124,9 @@ function AdminDashboard(props) {
                   <i class="fa-solid fa-circle-question mr-2"></i>
                   <p>FAQ</p>
                 </div>
-                <div className="flex items-center p-2 hover:bg-gray-500 hover:text-white">
+                <div onClick={handleLogout} className="flex items-center p-2 hover:bg-gray-500 hover:text-white">
                   <i class="fa-solid fa-right-from-bracket mr-2"></i>
-                  <p>Sign out</p>
+                  <p>Logout</p>
                 </div>
               </div>
             </div>

@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useContext } from "react";
-import { listTypeRoom, listAvailable } from "../../../utils/Constants";
-import { ContextLocation } from "../../../context/LocationContext";
-import { ContextHotel } from "../../../context/HotelContext";
+import { listAvailable } from "../../utils/Constants";
+import { ContextLocation } from "../../context/LocationContext";
+import { ContextHotel } from "../../context/HotelContext";
+import { ContextRooms } from "../../context/RoomContext";
 import { DatePicker } from "@mui/lab";
-import { ContextTypeBusiness } from "../../../context/TypeContext";
 import {
   FormLabel,
   Radio,
@@ -26,20 +26,22 @@ import {
   InputLabel,
   Container,
   Paper,
+  Typography,
 } from "@mui/material";
 import {
   addDocument,
   fetchDocuments,
   deleteDocument,
   updateDocument,
-} from "../../../services/FirebaseService";
-import ModalDelete from "./ModalDelete";
-import { ContextAmenities } from "../../../context/AmenitiesContext";
-import ModalImgs from "./ModalImgs";
-import { ContextLogin } from "../../../context/LoginContext";
+} from "../../services/FirebaseService";
+import ModalDelete from "../admin/hotels page/ModalDelete";
+import { ContextAmenities } from "../../context/AmenitiesContext";
+import ModalImgs from "../admin/hotels page/ModalImgs";
+import { ContextTypeBusiness } from "../../context/TypeContext";
+import { ContextLogin } from "../../context/LoginContext";
+import { CustomerLoginContext } from "../../context/CustomerLoginContext";
 
-
-function Rooms(props) {
+function ListRoom(props) {
   const [listRooms, setListRooms] = useState([]);
   const [preViewImg, setPreviewImg] = useState([]);
   const [imgUpload, setImgUpload] = useState([]);
@@ -61,15 +63,26 @@ function Rooms(props) {
   const listLocation = useContext(ContextLocation);
   const listHotel = useContext(ContextHotel);
   const listType = useContext(ContextTypeBusiness);
-
-
+  const { isLogin, setIsLogin } = useContext(CustomerLoginContext);
+  const listRoomContext = useContext(ContextRooms);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
   useEffect(() => {
-    const filteredAddress = listHotel.filter((hot) => hot.city == room.location);
-    setHotelByLocal(filteredAddress);
+    if (room && room.location) {
+      const filteredAddress = listHotel.filter(
+        (hot) => hot.city == room.location
+      );
+      setHotelByLocal(filteredAddress);
+    }
   }, [room]);
+
+  useEffect(() => {
+    const listRoomUser = listRoomContext.filter(
+      (a) => a.idCustomer === isLogin.id
+    );
+    setListRooms(listRoomUser);
+  }, [listRoomContext, isLogin]);
 
   const handleAmenities = (id) => {
     setListAmenities((prev) => {
@@ -90,14 +103,35 @@ function Rooms(props) {
       return updatedAmenities; // Update listAmenities state
     });
   };
+  const calculateRemainingDays = (roomDays) => {
+    const now = new Date();
+    const targetDate = new Date(now);
+    targetDate.setDate(targetDate.getDate() + roomDays);
+    const remainingTime = targetDate - now;
 
+    // Tính số ngày còn lại
+    const remainingDays = Math.floor(remainingTime / (1000 * 60 * 60 * 24));
+    return remainingDays;
+  };
+  // Hàm cập nhật trạng thái cho mỗi phòng theo thời gian thực
+  const updateRoomStatus = () => {
+    setListRooms((prevRooms) =>
+      prevRooms.map((room) => {
+        const remainingDays = calculateRemainingDays(room.days);
+        return {
+          ...room,
+          status: remainingDays > 0 ? "Active" : "Not Active",
+          remainingDays: remainingDays > 0 ? remainingDays : 0,
+        };
+      })
+    );
+  };
   useEffect(() => {
-    const fetchData = async () => {
-      const roomsData = await fetchDocuments("listRooms");
-      setListRooms(roomsData);
-    };
-    fetchData();
-  }, [update]);
+    // Thiết lập interval để cập nhật trạng thái theo thời gian thực
+    const interval = setInterval(updateRoomStatus, 1000);
+
+    return () => clearInterval(interval); // Dọn dẹp interval khi component unmount
+  }, []);
 
   const handleSubmit = async () => {
     try {
@@ -149,9 +183,13 @@ function Rooms(props) {
   // Lọc danh sách phòng theo giá trị tìm kiếm
   const filteredRooms = listRooms.filter(
     (room) =>
-      room.persons.toLowerCase().includes(searchInput.toLowerCase()) ||
-      room.price_per_night.toString().includes(searchInput) ||
-      room.available.toLowerCase().includes(searchInput.toLowerCase())
+      room.persons
+        ?.toString()
+        .toLowerCase()
+        .includes(searchInput.toLowerCase()) ||
+      room.price?.toString().includes(searchInput) ||
+      room.available?.toLowerCase().includes(searchInput.toLowerCase()) ||
+      room.idCustomer?.toLowerCase().includes(searchInput.toLowerCase())
   );
 
   const isAmenitySelected = (id) => {
@@ -193,36 +231,30 @@ function Rooms(props) {
   };
   return (
     <div>
-      <header className="grid grid-cols-12 gap-4 p-4">
-        <div className="col-span-3 flex items-center">List Rooms</div>
-        <div className="col-span-6 flex">
+      <header className="flex justify-between p-5">
+        <div className="p-2 text-2xl font-thin">Nhà/phòng cho thuê của bạn</div>
+        <div>
           <input
-            className="flex-1 p-2 border border-gray-300 rounded-l-md"
+            className=" p-2 border  border-gray-300 rounded-md"
             type="text"
             value={searchInput}
             onChange={(e) => setSearchInput(e.target.value)}
             placeholder="Search rooms..."
           />
         </div>
-        <div className="col-span-3 flex justify-end">
-          <Button variant="contained" onClick={clearRoom} color="success">
-            Add Room
-          </Button>
-        </div>
       </header>
+
       {/* Table */}
-      <TableContainer sx={{ padding: 2 }}>
+      <TableContainer sx={{ padding: 2, padding: "30px" }}>
         <Table>
           <TableHead>
             <TableRow>
               <TableCell align="center">Room ID</TableCell>
               <TableCell align="center">Room Persons</TableCell>
               <TableCell align="center">Price Per Night</TableCell>
-              <TableCell align="center">Available</TableCell>
               <TableCell align="center">Amenity</TableCell>
               <TableCell align="center">Animals</TableCell>
-              <TableCell align="center">Customer</TableCell>
-              <TableCell align="center">Room days</TableCell>
+              <TableCell align="center">Days</TableCell>
               <TableCell align="center">Action</TableCell>
             </TableRow>
           </TableHead>
@@ -238,28 +270,38 @@ function Rooms(props) {
                     {room.persons} <i class="fa-solid fa-person"></i>
                   </TableCell>
                   <TableCell align="center">{room.price}</TableCell>
-                  <TableCell align="center">{room.available}</TableCell>
                   <TableCell align="center">
                     {room.listAmenities && room.listAmenities.length > 0
                       ? room.listAmenities.map((amenityId, i) => {
-                        const amenity = amenities.find(
-                          (a) => a.id === amenityId
-                        );
-                        return amenity ? (
-                          <i
-                            key={i}
-                            className={amenity.icon}
-                            style={{ marginRight: "10px" }}
-                          ></i>
-                        ) : null;
-                      })
+                          const amenity = amenities.find(
+                            (a) => a.id === amenityId
+                          );
+                          return amenity ? (
+                            <i
+                              key={i}
+                              className={amenity.icon}
+                              style={{ marginRight: "10px" }}
+                            ></i>
+                          ) : null;
+                        })
                       : "No amenities"}
                   </TableCell>
                   <TableCell align="center">{room.animal}</TableCell>
-                  <TableCell align="center">{room.idCustomer}</TableCell>
-                  <TableCell align="center">{room.days}</TableCell>
+                  <TableCell align="center">
+                    {room.remainingDays ? (
+                      <span>
+                        {calculateRemainingDays(room.remainingDays) > 0 ? (
+                          <span className="text-green-700">Active</span>
+                        ) : (
+                          <span className="text-red-700">Not Active</span>
+                        )}
+                      </span>
+                    ) : (
+                      <span className="text-red-700">Not Active</span>
+                    )}
+                  </TableCell>
 
-                  <TableCell align="center" className="text-nowrap">
+                  <TableCell align="center">
                     <Button
                       onClick={() => {
                         setImgsModal(true);
@@ -326,13 +368,13 @@ function Rooms(props) {
                 label="Price per night"
                 variant="outlined"
                 value={room.price}
-                onChange={(e) =>
-                  setRoom({ ...room, price: e.target.value })
-                }
+                onChange={(e) => setRoom({ ...room, price: e.target.value })}
                 style={{ marginBottom: "10px", marginTop: "10px" }}
               />
               <FormControl fullWidth>
-                <InputLabel id="room-available-label">Room Available</InputLabel>
+                <InputLabel id="room-available-label">
+                  Room Available
+                </InputLabel>
                 <Select
                   labelId="room-available-label"
                   id="room-available-select"
@@ -364,7 +406,11 @@ function Rooms(props) {
                       control={<Radio />}
                       label="Yes"
                     />
-                    <FormControlLabel value="no" control={<Radio />} label="No" />
+                    <FormControlLabel
+                      value="no"
+                      control={<Radio />}
+                      label="No"
+                    />
                   </Box>
                 </RadioGroup>
               </FormControl>
@@ -416,10 +462,13 @@ function Rooms(props) {
 
               <FormControl fullWidth>
                 <FormLabel>Room Days</FormLabel>
-                <Box  style={{
-                        marginTop: "15px"
-                      }} >
-                  <TextField  
+                <Box
+                  style={{
+                    marginTop: "15px",
+                  }}
+                >
+                  <TextField
+                    disabled
                     label="Days"
                     type="number"
                     value={room.days}
@@ -430,7 +479,6 @@ function Rooms(props) {
                   />
                 </Box>
               </FormControl>
-
             </div>
 
             <div className="box-2">
@@ -442,20 +490,19 @@ function Rooms(props) {
                   style={{ marginBottom: "10px", marginTop: "10px" }}
                   label="Room Type"
                   value={room.type}
-                  onChange={(e) =>
-                    setRoom({ ...room, type: e.target.value })
-                  }
+                  onChange={(e) => setRoom({ ...room, type: e.target.value })}
                 >
                   {listType.map((type, index) => (
                     <MenuItem key={index} value={type.id}>
-                      <i class={type.icon}></i>   {type.des}
+                      <i class={type.icon}></i> {type.des}
                     </MenuItem>
                   ))}
                 </Select>
               </FormControl>
               <FormControl fullWidth>
-                <InputLabel id="room-available-label">Room Customer</InputLabel>
+                <InputLabel id="room-available-label"> Customer</InputLabel>
                 <Select
+                  disabled
                   labelId="room-available-label"
                   id="room-available-select"
                   style={{ marginBottom: "10px", marginTop: "10px" }}
@@ -480,8 +527,9 @@ function Rooms(props) {
                   style={{ marginBottom: "10px" }}
                   label="Room Available"
                   value={room.location}
-                  onChange={(e) => setRoom({ ...room, location: e.target.value })}
-
+                  onChange={(e) =>
+                    setRoom({ ...room, location: e.target.value })
+                  }
                 >
                   {listLocation.map((location, index) => (
                     <MenuItem key={index} value={location.id}>
@@ -491,14 +539,18 @@ function Rooms(props) {
                 </Select>
               </FormControl>
               <FormControl fullWidth>
-                <InputLabel id="room-available-label">Hotel Location</InputLabel>
+                <InputLabel id="room-available-label">
+                  Hotel Location
+                </InputLabel>
                 <Select
                   labelId="room-available-label"
                   id="room-available-select"
                   style={{ marginBottom: "10px" }}
                   label="Room Available"
                   value={room.roomLocation}
-                  onChange={(e) => setRoom({ ...room, roomLocation: e.target.value })}
+                  onChange={(e) =>
+                    setRoom({ ...room, roomLocation: e.target.value })
+                  }
                 >
                   {hotelByLocal.map((location, index) => (
                     <MenuItem key={index} value={location.address}>
@@ -550,9 +602,7 @@ function Rooms(props) {
                   <p>No images available</p>
                 )}
               </div>
-
             </div>
-
           </Box>
           <Box className=" flex justify-end mt-4">
             <Button variant="contained" color="primary" onClick={handleSubmit}>
@@ -583,4 +633,4 @@ function Rooms(props) {
   );
 }
 
-export default Rooms;
+export default ListRoom;

@@ -69,6 +69,7 @@ function AdminRoutes(props) {
         path : "/typebusiness",
         page : TypeBusiness
       }
+      
 
 
    ]

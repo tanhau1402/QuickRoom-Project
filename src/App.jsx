@@ -3,12 +3,14 @@ import "./App.css";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import ClientRoutes from "./routes/ClientRoutes";
 import Home from "./pages/clients/Home";
-
+import {CustomerLoginContext} from "./context/CustomerLoginContext";
+import { useContext,useState } from "react";
 function App() {
-  return (
+  const { isLogin } = useContext(CustomerLoginContext);
+  return ( 
     <>
-      <AdminDashboard></AdminDashboard>
-      {/* <Home/> */}
+      {isLogin?.role =="admin" || isLogin?.role == "moderator" ? 
+      <AdminDashboard></AdminDashboard> : <Home ></Home>}
     </>
   );
 }

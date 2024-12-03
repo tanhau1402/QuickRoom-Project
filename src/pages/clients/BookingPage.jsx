@@ -6,14 +6,13 @@ function BookingPage(props) {
   const listType = useContext(ContextTypeBusiness);
   const [typeId, setTypeId] = useState(null);
 
-  console.log(typeId);
   return (
     <div>
       <p className='text-3xl text-center font-semibold p-4'>Điều nào sau đây mô tả chính xác nhất về <br /> chỗ ở của bạn?</p>
-      <div className='grid grid-cols-2 text-center mx-auto  md:grid-cols-3 gap-3 lg:grid-cols-3 container w-[40vw]'>
+      <div className='grid grid-cols-1 text-center mx-auto  md:grid-cols-3 gap-3 lg:grid-cols-3 container w-[40vw]'>
 
         {listType.map((type) => (
-          <div onClick={() => setTypeId(type.id)} className={`warp border rounded-xl mx-auto w-full h-full p-3 ${type.id == typeId ? " bg-red-400 text-white" : ""}`}>
+          <div onClick={() => setTypeId(type.id)} className={`warp border  rounded-xl mx-auto w-full h-full p-3 ${type.id == typeId ? " bg-red-400 text-white" : ""}`}>
             <div className="icon">
               <i className={type.icon}></i>
             </div>

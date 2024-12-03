@@ -1,9 +1,11 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { useParams } from "react-router-dom";
 import { ContextLocation } from '../../context/LocationContext';
 import { ContextHotel } from '../../context/HotelContext';
 import { listAvailable } from '../../utils/Constants';
 import { ContextAmenities } from '../../context/AmenitiesContext';
+import { CustomerLoginContext } from '../../context/CustomerLoginContext';
+import { PayPalScriptProvider, PayPalButtons } from '@paypal/react-paypal-js';
 import {
     FormLabel,
     Radio,
@@ -16,28 +18,41 @@ import {
     MenuItem,
     FormControl,
     InputLabel,
+    Typography
 } from "@mui/material";
-import { addDocument,updateDocument } from '../../services/FirebaseService';
+import { addDocument, updateDocument } from '../../services/FirebaseService';
 
 function RoomInfo(props) {
     const { id } = useParams();
-    console.log(id);
     const listLocation = useContext(ContextLocation);
-
+    const { isLogin, setIsLogin } = useContext(CustomerLoginContext);
     const listHotel = useContext(ContextHotel);
     const listAmenities = useContext(ContextAmenities);
     const [amenity, setListAmenity] = useState([]);
     const [preViewImg, setPreviewImg] = useState([]);
     const [hotelByLocal, setHotelByLocal] = useState([]);
     const [imgUpload, setImgUpload] = useState([]);
-    const [hotel, setHotel] = useState([]);
+    const [hotel, setHotel] = useState({});
     const [update, setUpdate] = useState(false);
-    const [hidden, setHidden] = useState(true);
+    const rentPrice = useRef(0);
+    const hotelCurrent = useRef({});
+    const listImgCurrent = useRef([]);
 
-   useEffect(() => {
-    const filteredAddress = listHotel.filter((hot) => hot.city == hotel.location );
-    setHotelByLocal(filteredAddress);
-   },[hotel]);
+    useEffect(() => {
+        const filteredAddress = listHotel.filter((hot) => hot.city == hotel.location);
+        setHotelByLocal(filteredAddress);
+        rentPrice.current = hotel?.total;
+        hotelCurrent.current = hotel;
+    }, [hotel]);
+
+    useEffect(() => {
+        setHotel({ ...hotel, listAmenities: amenity });
+    }, [amenity]);
+
+    useEffect(() => {
+        listImgCurrent.current = imgUpload;
+    }, [imgUpload]);
+
 
 
     const isAmenitySelected = (id) => {
@@ -82,6 +97,7 @@ function RoomInfo(props) {
                 setPreviewImg((prev) => [...prev, ...urls]); // Cập nhật danh sách xem trước hình ảnh
                 setImgUpload((prevFiles) => [...prevFiles, ...files]); // Cập nhật danh sách tệp hình ảnh để tải lên
             })
+
             .catch((error) => {
                 console.error("Error reading files:", error);
             });
@@ -90,25 +106,31 @@ function RoomInfo(props) {
 
     const handleSubmit = async () => {
         try {
-          // Kiểm tra xem room đã tồn tại hay chưa
-          if (hotel.id) {
-            // Nếu room đã có id, cập nhật thông tin và hình ảnh mới
-            await updateDocument("listHotelForRent", hotel.id, {
-              ...hotel,
-              imgUrls: preViewImg,
-            });
-          } else {
-            // Nếu room chưa có id, thêm room mới với hình ảnh mới
-            await addDocument("listHotelForRent", hotel, imgUpload);
-          }
-    
-          // Sau khi xử lý xong, cập nhật lại danh sách và đóng modal
-          setUpdate(!update);
-          
+            // Kiểm tra xem room đã tồn tại hay chưa
+            const newValue = hotelCurrent.current;
+            const imgList1 = listImgCurrent.current;
+            console.log(newValue);
+
+            if (hotel.id) {
+                // Nếu room đã có id, cập nhật thông tin và hình ảnh mới
+                await updateDocument("listRooms", hotel.id, {
+                    ...hotel,
+                    imgUrls: preViewImg,
+                });
+            } else {
+                // Nếu room chưa có id, thêm room mới với hình ảnh mới
+                await addDocument("listRooms", newValue, imgList1);
+                
+
+            }
+
+            // Sau khi xử lý xong, cập nhật lại danh sách và đóng modal
+            setUpdate(!update);
+
         } catch (error) {
-          console.error("Error submitting room:", error);
+            console.error("Error submitting room:", error);
         }
-      };
+    };
     const deleteImg = (index) => {
         // Nếu hình ảnh là ảnh đã có sẵn (không thuộc imgUpload), chỉ xóa khỏi preViewImg
         if (!imgUpload[index]) {
@@ -119,10 +141,23 @@ function RoomInfo(props) {
             setImgUpload((prevFiles) => prevFiles.filter((_, i) => i !== index));
         }
     };
+    const handleDaysChange = (e) => {
+        const days = parseInt(e.target.value, 10) ||
+            "";
+        setHotel((prevHotel) => ({
+            ...prevHotel,
+            days: days,
+            total: days * 10 // mỗi ngày 10 đô
+        }));
+        setHotel((prevHotel) => ({
+            ...prevHotel,
+            idCustomer: isLogin.id,
+        }));
+    };
 
     return (
         <div>
-            <div className="grid grid-cols-2 text-center  mx-auto  md:grid-cols-2 gap-3 lg:grid-cols-2 container">
+            <div className="grid grid-cols-1 text-center  mx-auto  md:grid-cols-2 gap-3 lg:grid-cols-2 mt-8 container">
                 <div className="main-left p-5">
                     <FormControl fullWidth>
                         <InputLabel id="room-available-label">Room Location</InputLabel>
@@ -239,12 +274,12 @@ function RoomInfo(props) {
                         >
                             {listAmenities.map((amenity) => (
                                 <Button
-                                key={amenity.id}
-                                value={hotel.amenity}
-                                onClick={() => handleAmenities(amenity.id)}
-                                variant={
-                                  isAmenitySelected(amenity.id) ? "contained" : "outlined"
-                                }
+                                    key={amenity.id}
+                                    value={hotel.amenity}
+                                    onClick={() => handleAmenities(amenity.id)}
+                                    variant={
+                                        isAmenitySelected(amenity.id) ? "contained" : "outlined"
+                                    }
                                     style={{
                                         display: "flex",
                                         alignItems: "center",
@@ -257,10 +292,25 @@ function RoomInfo(props) {
                             ))}
                         </div>
                     </FormControl>
+                    <FormControl className='flex'>
+                        <FormLabel>Payment Service</FormLabel>
+                        <TextField
+                            label="Số ngày hiển thị"
+                            type="number"
+                            value={hotel.days}
+                            onChange={handleDaysChange}
+                            margin="normal"
+                        />
+
+
+                        <Typography variant="h6" sx={{ marginTop: 2 }}>
+                            Tổng số tiền: {hotel.total} USD
+                        </Typography>
+                    </FormControl>
                 </div>
             </div>
-            <div className="img-container grid grid-cols-1 text-center  mx-auto  md:grid-cols-1 gap-3 lg:grid-cols-1 container">
-                <div className="box-2">
+            <div className="img-container grid grid-cols-1 text-center  mx-auto  md:grid-cols-2 gap-3 lg:grid-cols-2 container">
+                <div className="box-1">
                     {/* Image URL Input */}
                     <InputLabel
                         style={{
@@ -276,11 +326,11 @@ function RoomInfo(props) {
                         type="file"
                         accept="image/*"
                         onChange={(e) => handleImageUpload(e)}
-                        style={{ marginBottom: "10px", marginTop: "10px" }}
+                        style={{ marginBottom: "10px", marginTop: "10px",textAlign: 'center' }}
                     />
 
                     {/* Image Preview */}
-                    <div className="grid grid-cols-4 md:grid-cols-4   lg:grid-cols-4 gap-5">
+                    <div className="grid grid-cols-2 md:grid-cols-4 mx-auto  p-3  lg:grid-cols-4 gap-5">
                         {preViewImg.length > 0 ? (
                             preViewImg.map((image, index) => (
                                 <div className="relative mt-3" key={index}>
@@ -304,13 +354,43 @@ function RoomInfo(props) {
                         )}
                     </div>
                 </div>
-                <div className="button-submit">
-                <Button variant="contained" color="primary" onClick={handleSubmit}>
-                Save
-            </Button>
+                <div className="box-2">
+                    <PayPalScriptProvider
+                        options={{ "client-id": "AfXPw1SPq4L3iiggjJv1PUVZ2zyXlfk3PnLiygFoogPAuhRjUxsdnvyHbRuN2lgwqVZ75brnlyQJnSaL" }}  // Thay YOUR_CLIENT_ID bằng Client ID của bạn
+                    >
+                        <div style={{ maxWidth: "750px", margin: "auto", padding: "50px" }}>
+                            <PayPalButtons
+                                style={{ layout: 'vertical' }}
+                                createOrder={(data, actions) => {
+                                    // check validation
+                                    return actions.order.create({
+                                        purchase_units: [
+                                            {
+                                                amount: {
+                                                    value: rentPrice.current,  // Số tiền thanh toán
+                                                },
+                                            },
+                                        ],
+                                    });
+                                }}
+                                onApprove={(data, actions) => {
+                                    return actions.order.capture().then((details) => {
+                                        alert(`Transaction completed by ${details.payer.name.given_name}`);
+                                        handleSubmit(details.id);
+                                    });
+                                }}
+                                onError={(err) => {
+                                    console.error("PayPal Checkout onError", err);
+                                    alert("Payment could not be processed");
+                                }}
+                            />
+                        </div>
+                    </PayPalScriptProvider>
                 </div>
-                
             </div>
+
+            <hr className='mt-5 mb-5' />
+
         </div>
     );
 }

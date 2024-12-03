@@ -53,6 +53,23 @@ function ModalSignUp({setSignUpModal,signUpModal}) {
             Sign Up to QuickRoom
           </h2>
           <form action="#" method="POST" class="space-y-4">
+              {/* <!-- Username Input --> */}
+          <div>
+              <label
+                for="username"
+                class="block text-sm font-medium text-gray-700"
+              >
+                Username
+              </label>
+              <input
+                type="username"
+                id="username"
+                name="username"
+                class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                placeholder="james"
+                required
+              />
+            </div>
             {/* <!-- Email Input --> */}
             <div>
               <label
@@ -107,14 +124,14 @@ function ModalSignUp({setSignUpModal,signUpModal}) {
             </div>
 
             {/* <!-- Remember me checkbox --> */}
-            <div class="flex items-center justify-between">
+            {/* <div class="flex items-center justify-between">
               <label for="remember" class="flex items-center">
                 <span class="ml-2 text-sm text-gray-600">Bạn đã có tài khoản</span>
               </label>
               <a href="#" class="text-sm text-indigo-600 hover:text-indigo-500">
-                Đăng nhập
+                Sign up
               </a>
-            </div>
+            </div> */}
 
             {/* <!-- Submit button --> */}
             <div>
@@ -122,7 +139,7 @@ function ModalSignUp({setSignUpModal,signUpModal}) {
                 type="submit"
                 class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
               >
-                Sign in
+                Sign up
               </button>
             </div>
           </form>

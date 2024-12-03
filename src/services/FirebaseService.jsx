@@ -97,3 +97,20 @@ export const addDocumentById = async (collectionName, id, values, imgUpload) => 
         throw error;
     }
   };
+  export const fetchDocumentsRealtime = (collectionName, callback) => {
+    const collectionRef = collection(db, collectionName);
+  
+    // Lắng nghe dữ liệu thay đổi trong thời gian thực
+    const unsubscribe = onSnapshot(collectionRef, (querySnapshot) => {
+        const documents = [];
+        querySnapshot.forEach((doc) => {
+            documents.push({ id: doc.id, ...doc.data() });
+        });
+        
+        // Gọi callback với dữ liệu mới nhất
+        callback(documents);
+    });
+  
+    // Hàm trả về unsubscribe để có thể dừng lắng nghe khi không cần nữa
+    return unsubscribe;
+  };

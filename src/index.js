@@ -11,6 +11,8 @@ import { LoginContext } from "./context/LoginContext";
 import { TypeContext } from "./context/TypeContext";
 import { HotelContext } from "./context/HotelContext";
 import { CustomerLoginProvider } from "./context/CustomerLoginContext";
+import SearchValueContext from "./context/SearchValueContext";
+import { BookingContext } from "./context/BookingContext";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
@@ -23,7 +25,11 @@ root.render(
               <TypeContext>
                 <HotelContext>
                   <CustomerLoginProvider>
+                    <SearchValueContext>
+                    <BookingContext>
                     <App />
+                    </BookingContext>
+                    </SearchValueContext>
                   </CustomerLoginProvider>
                 </HotelContext>
               </TypeContext>

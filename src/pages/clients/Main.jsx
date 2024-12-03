@@ -1,6 +1,8 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, removeAccents } from "react";
 import { ContextRooms } from "../../context/RoomContext";
 import { ContextAmenities } from "../../context/AmenitiesContext";
+import { ContextSearchValue } from "../../context/SearchValueContext";
+import { ContextBooking } from "../../context/BookingContext";
 import {
   Card,
   CardContent,
@@ -30,40 +32,76 @@ const settings = {
   slidesToScroll: 1,
   arrows: true,
 };
-function Main(props) {
+
+function Main() {
+  const { inputValue } = useContext(ContextSearchValue);
   const amenities = useContext(ContextAmenities);
   const [amenity, setAmenity] = useState(null);
   const rooms = useContext(ContextRooms);
-  const filteredRooms = rooms.filter((room) => {
-    if (amenity) {
-      return room.listAmenities.some((a) => a == amenity);
-    } else {
-      return room;
-    }
-  });
+  const listBooking = useContext(ContextBooking);
 
+
+  const checkBooking = (start, end, idRoom) => {
+    // Chuyển start và end thành đối tượng Date nếu chưa phải là Date
+    const checkInDate = new Date(start);
+    const checkOutDate = new Date(end);
+  
+    // Lọc danh sách booking của phòng theo roomId
+    const booking = listBooking.filter(a => a.roomId === idRoom);
+  
+    // Kiểm tra xem phòng đã được đặt trong khoảng thời gian này chưa
+    const isRoomAvailable = !booking.some(a => {
+      const roomStartDate = new Date(a.startDay);
+      const roomEndDate = new Date(a.endDay);
+
+      // Điều kiện phòng không trùng với thời gian mới
+      return !(checkInDate >= roomEndDate || checkOutDate <= roomStartDate);
+    });
+  
+    // Trả về kết quả nếu phòng có sẵn (true nếu không trùng lịch, false nếu đã có booking)
+    return isRoomAvailable;
+  };
+  
+  const filteredRooms = rooms.filter((room) => {
+    const { location, checkin, checkout, guests } = inputValue;
+
+    // Kiểm tra các điều kiện lọc (vị trí, số lượng khách, tiện ích)
+    const isLocationMatch = location ? room.roomLocation.toLowerCase().includes(location.toLowerCase()) : true;
+    const isGuestsMatch = guests ? parseInt(room.persons) >= parseInt(guests) : true;
+    const isAmenityMatch = amenity ? room.listAmenities.some((a) => a === amenity) : true;
+
+    // Kiểm tra xem phòng có khả dụng hay không
+    const isRoomAvailable = checkin && checkout ? checkBooking(checkin, checkout, room.id) : true;
+
+    // Kết hợp tất cả các điều kiện
+    return isLocationMatch && isGuestsMatch && isAmenityMatch && isRoomAvailable;
+});
+ console.log(amenity);
   return (
     <div>
-      <div className="main p-5">
-        <div className="list-amenities flex text-center justify-center p-2">
-          {amenities.map((amenity) => (
+      <div className="main  p-5">
+        <div className="list-amenities mb-3 border border-purple-800 rounded-xl  grid grid-cols-3 text-center place-items-center  md:grid-cols-4 lg:grid-cols-12  p-4">
+          {amenities.map((amenityy) => (
             <div
-              onClick={() => setAmenity(amenity.id)}
-              className="flex-1 hover:bg-red-500 hover:text-white"
+              onClick={() => setAmenity(amenityy.id)}
+              className={`flex-1 hover:scale-110 duration-300 cursor-pointer p-4 rounded-lg ${
+                amenity === amenityy.id ? " text-purple-700" : " text-gray-700"
+              }`}
             >
               <li
-                key={amenity.id}
+                key={amenityy.id}
                 style={{
-                  fontSize: "27px",
+                  fontSize: "23px",
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
                   padding: "10px",
+                  
                 }}
               >
-                <i className={amenity.icon}></i>
+                <i className={amenityy.icon}></i>
               </li>
-              <p>{amenity.name}</p>
+              <p className="text-sm">{amenityy.name}</p>
             </div>
           ))}
         </div>
@@ -71,7 +109,7 @@ function Main(props) {
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 p-4">
           {filteredRooms.map((room) => (
             <Link to={`detail/${room.id}`}>
-            <Card sx={{ maxWidth: 345, borderRadius: 2, boxShadow: 3 }}>
+            <Card className="hover:scale-105 duration-300" sx={{  borderRadius: 2, boxShadow: 3 }}>
               <Box sx={{ position: "relative" }}>
                 <Slider {...settings}>
                   {room.imgUrls.map((img, index) => (
@@ -101,19 +139,24 @@ function Main(props) {
                   <i class="fa-regular fa-heart"></i>
                 </IconButton>
               </Box>
-              <CardContent>
+              <CardContent className="mt-3" >
+              
+              <Typography style={{ fontWeight: 'bold' }}   variant="body2">
+                  {room.roomLocation}
+                </Typography>
                 <Typography variant="body2">
                   {room.available}
                 </Typography>
                 <Typography variant="body1" color="textSecondary">Person : {room.persons}</Typography>
                 <Typography variant="body1" color="textSecondary">
-                  Animals : {room.animals}
+                  Animals : {room.animal}
                 </Typography>
                 <Typography
                   color="textPrimary"
                   sx={{ marginTop: 1 }}
+                  style={{ fontWeight: 'bold' }}
                 >
-                  {room.price_per_night} USD
+                  {room.price} <span className="font-thin">USD/night</span>
                 </Typography>
               </CardContent>
             </Card>
@@ -138,21 +181,7 @@ function Main(props) {
           >
             Văn hóa và nghệ thuật
           </button>
-          <button className="me-4 font-medium text-sm text-gray-500 p-2">
-            Ngoài trời
-          </button>
-          <button className="me-4 font-medium text-sm text-gray-500 p-2">
-            Dãy núi
-          </button>
-          <button className="me-4 font-medium text-sm text-gray-500 p-2">
-            Bãi biển
-          </button>
-          <button className="me-4 font-medium text-sm text-gray-500 p-2">
-            Danh mục
-          </button>
-          <button className="me-4 font-medium text-sm text-gray-500 p-2">
-            Những điều nên trải nghiệm
-          </button>
+          
         </div>
         <div className="showList">
           <div

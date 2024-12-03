@@ -10,7 +10,6 @@ import {
 
 
 function ModalImgs({ setImgsModal, imgsModal, imgList }) {
-  console.log(imgList);
   return (
     <div >
       <div className="relative">

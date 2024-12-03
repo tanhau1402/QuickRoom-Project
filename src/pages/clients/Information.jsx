@@ -19,19 +19,18 @@ import {
     FormControl,
 } from "@mui/material";
 
-import {
-    addDocument,
-    fetchDocuments,
+import { fetchDocuments,
     deleteDocument,
     updateDocument,
-    addDocumentById,
-} from "../../../services/FirebaseService";
+    addDocumentById
+ } from "../../services/FirebaseService";
 
-import ModalDelete from "../hotels page/ModalDelete";
-import { ROLES } from "../../../utils/Constants";
-import { auth, googleProvider } from "../../../services/firebase";
+import ModalDelete from "../admin/hotels page/ModalDelete";
+import { ROLES } from "../../utils/Constants";
+import { CustomerLoginContext } from "../../context/CustomerLoginContext";
+
 const inter = { name: "", des: "" };
-function Users(props) {
+function Information(props) {
     const [open, setOpen] = useState(false);
     const [errors, setErrors] = useState(inter);
 
@@ -54,6 +53,9 @@ function Users(props) {
 
     const [imgUpload, setImgUpload] = useState([]);
     const [preViewImg, setPreviewImg] = useState([]);
+
+    const { isLogin, setIsLogin } = useContext(CustomerLoginContext);
+
 
     useEffect(() => {
         const fetchData = async () => {
@@ -116,12 +118,14 @@ function Users(props) {
         }
     };
 
-    const filteredUser = listUser.filter(
-        (user) =>
-            user.nameCustomer.toLowerCase().includes(searchInput.toLowerCase()) ||
-            user.id.toLowerCase().includes(searchInput.toLowerCase()) ||
-            user.role.toLowerCase().includes(searchInput.toLowerCase())
-    );
+    const filteredUser = listUser.filter((user) => {
+        // So sánh đúng kiểu dữ liệu cho idCustomer
+        const isIdCustomerMatch = user.id.toString() === isLogin.id.toString();
+      
+       
+        return isIdCustomerMatch;
+      });
+      
     const handleInput = (e) => {
         const { name, value } = e.target;
         setUser({ ...user, [name]: value });
@@ -136,24 +140,7 @@ function Users(props) {
     return (
         <div>
             <header className="grid grid-cols-12 gap-4 p-4">
-                <div className="col-span-3 flex items-center text-2xl">List User</div>
-                <div className="col-span-6 flex">
-                    <input
-                        className="flex-1 p-2 border border-gray-300 rounded-l-md"
-                        type="text"
-                        value={searchInput}
-                        onChange={(e) => setSearchInput(e.target.value)}
-                        placeholder="Search location..."
-                    />
-                    <button className="p-2 bg-emerald-600 text-white rounded-r-md">
-                        <i className="fa-solid fa-magnifying-glass"></i>
-                    </button>
-                </div>
-                <div className="col-span-3 flex justify-end">
-                    <Button variant="contained" disabled color="success" onClick={clearUser}>
-                        Add User
-                    </Button>
-                </div>
+                <div className="col-span-3 flex items-center text-2xl">My Information</div>
             </header>
             {/* Table */}
             <TableContainer  sx={{ padding: 2 }}>
@@ -196,17 +183,7 @@ function Users(props) {
                                         >
                                             <i class="fa-regular fa-pen-to-square"></i>
                                         </Button>
-                                        <Button
-                                            onClick={() => {
-                                                setDeleteModal(true);
-                                                setDeleteId(user.id);
-                                            }}
-                                            sx={{ padding: "10px" }}
-                                            variant="contained"
-                                            color="error"
-                                        >
-                                            <i class="fa-solid fa-trash"></i>
-                                        </Button>
+                                        
                                     </TableCell>
                                 </TableRow>
                             ))}
@@ -312,4 +289,4 @@ function Users(props) {
     );
 }
 
-export default Users;
+export default Information;
